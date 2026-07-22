@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roblox Launcher</title>
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0b0c10;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --primary-glow: linear-gradient(135deg, #00b06f 0%, #00e676 100%);
+            --text-main: #ffffff;
+            --text-secondary: #8b949e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Ambient Glow Background Effect */
+        body::before {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: #00b06f;
+            filter: blur(150px);
+            opacity: 0.12;
+            top: 20%;
+            left: 20%;
+            z-index: 0;
+        }
+
+        body::after {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: #00e676;
+            filter: blur(150px);
+            opacity: 0.12;
+            bottom: 20%;
+            right: 20%;
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            width: 90%;
+            max-width: 440px;
+        }
+
+        .launcher-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .launcher-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7);
+        }
+
+        .logo-container {
+            margin-bottom: 25px;
+        }
+
+        .logo-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--primary-glow);
+            border-radius: 18px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0, 176, 111, 0.3);
+            margin-bottom: 15px;
+            animation: pulse 2s infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 10px 25px rgba(0, 176, 111, 0.25);
+            }
+            100% {
+                transform: scale(1.04);
+                box-shadow: 0 15px 35px rgba(0, 176, 111, 0.45);
+            }
+        }
+
+        .logo-icon svg {
+            width: 36px;
+            height: 36px;
+            fill: white;
+        }
+
+        h1 {
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 10px;
+            background: linear-gradient(180deg, #ffffff 0%, #d1d5db 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .description {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .info-badges-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .info-badge {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-size: 13px;
+            color: #cbd5e1;
+            display: inline-flex;
+            gap: 6px;
+        }
+
+        .info-badge span.accent {
+            color: #00e676;
+            font-weight: 600;
+        }
+
+        .launch-button {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            background: var(--primary-glow);
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            box-shadow: 0 8px 24px rgba(0, 176, 111, 0.25);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .launch-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(0, 176, 111, 0.4);
+            filter: brightness(1.1);
+        }
+
+        .launch-button:active {
+            transform: translateY(0);
+            box-shadow: 0 5px 15px rgba(0, 176, 111, 0.25);
+        }
+
+        .error-message {
+            color: #ff5252;
+            background: rgba(255, 82, 82, 0.08);
+            border: 1px solid rgba(255, 82, 82, 0.15);
+            padding: 18px;
+            border-radius: 14px;
+            font-size: 14px;
+            line-height: 1.5;
+            text-align: left;
+        }
+
+        code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            color: #ff7b72;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="launcher-card">
+            <div class="logo-container">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2Zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2Zm4.5 3c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5Zm3-3c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5Z"/>
+                    </svg>
+                </div>
+                <h1 id="title">Roblox Launcher</h1>
+                <p class="description" id="subtitle">Launch your game client directly from the browser window.</p>
+            </div>
+
+            <div class="info-badges-container" id="dynamic-content">
+                <!-- Badges will appear here dynamically -->
+            </div>
+
+            <a href="#" id="launch-btn" class="launch-button" style="display: none;">Join Experience</a>
+        </div>
+    </div>
+
+    <script>
+        // Retrieve placeId and accessCode from the URL query params
+        const urlParams = new URLSearchParams(window.location.search);
+        const placeId = urlParams.get('placeId') || urlParams.get('placeid');
+        const accessCode = urlParams.get('accessCode') || urlParams.get('accesscode');
+
+        const dynamicContent = document.getElementById('dynamic-content');
+        const launchBtn = document.getElementById('launch-btn');
+        const subtitle = document.getElementById('subtitle');
+
+        if (placeId) {
+            let innerHTML = `<div class="info-badge">Place ID: <span class="accent">${placeId}</span></div>`;
+            
+            if (accessCode) {
+                // Shorten displayed private server code for layout elegance
+                const shortCode = accessCode.length > 8 ? `${accessCode.substring(0, 8)}...` : accessCode;
+                innerHTML += `<div class="info-badge">Server Code: <span class="accent">${shortCode}</span></div>`;
+            }
+            
+            dynamicContent.innerHTML = innerHTML;
+            subtitle.innerText = "The game launch link is configured and ready.";
+
+            // Construct protocol URL
+            let launchUrl = `roblox://experiences/start?placeId=${placeId}`;
+            if (accessCode) {
+                launchUrl += `&accessCode=${accessCode}`;
+            }
+
+            // Set URL parameters onto button link
+            launchBtn.href = launchUrl;
+            launchBtn.style.display = 'inline-flex';
+        } else {
+            // Inform users how to format URL parameters to use this launcher
+            subtitle.innerText = "No launch targets are currently loaded.";
+            dynamicContent.innerHTML = `
+                <div class="error-message">
+                    <strong>Launch link configuration required:</strong><br>
+                    Add <code>?placeId=YOUR_GAME_ID</code> to the end of your browser's address bar to generate the launch action.
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
