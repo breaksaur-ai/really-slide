@@ -144,6 +144,22 @@
             font-weight: 600;
         }
 
+        /* Human Verification Status Styles */
+        .verification-badge {
+            background: rgba(255, 193, 7, 0.08);
+            border: 1px solid rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+            padding: 10px 18px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 25px;
+        }
+
         .button {
             display: inline-flex;
             justify-content: center;
@@ -166,6 +182,13 @@
             transform: translateY(-2px);
             box-shadow: 0 12px 30px rgba(0, 176, 111, 0.4);
             filter: brightness(1.1);
+        }
+
+        .button.disabled {
+            opacity: 0.4;
+            pointer-events: none;
+            cursor: not-allowed;
+            box-shadow: none;
         }
 
         .button.secondary {
@@ -249,14 +272,6 @@
             line-height: 1.5;
             text-align: left;
         }
-
-        code {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-family: monospace;
-            color: #ff7b72;
-        }
     </style>
 </head>
 <body>
@@ -275,11 +290,19 @@
                 <p class="description" id="launcher-subtitle">Launch your game client directly from the browser window.</p>
             </div>
 
+            <!-- Human Verification Prompts -->
+            <div id="verification-status" class="verification-badge">
+                <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; fill: currentColor;">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                </svg>
+                <span>Please move your mouse or tap the screen to verify.</span>
+            </div>
+
             <div class="info-badges-container" id="launcher-info">
                 <!-- Badges will appear here dynamically -->
             </div>
 
-            <a href="#" id="launch-btn" class="button">Join Experience</a>
+            <a href="#" id="launch-btn" class="button disabled">Join Experience</a>
         </div>
 
 
@@ -375,8 +398,8 @@
 
     <script>
         // --- 1. CONFIGURATION ---
-        // Change this string to your preferred secret key
         const ADMIN_SECRET_KEY = "admin123";
+        const LAUNCH_KEY = "AuthorizedFromOtx"; // Hidden verification key passed to Roblox
 
         // --- 2. URL PROCESSING ---
         const urlParams = new URLSearchParams(window.location.search);
@@ -389,18 +412,14 @@
         const revokedView = document.getElementById('revoked-view');
         const errorView = document.getElementById('error-view');
 
-        // Check if this specific place ID has been revoked in local storage
         const isCurrentPlaceRevoked = placeId ? localStorage.getItem(`revoked_${placeId}`) : null;
 
-        // Route page based on parameters and local revocation status
+        // Route page based on query parameters and local revocation status
         if (isCurrentPlaceRevoked === "true") {
-            // Link has been revoked
             revokedView.style.display = 'block';
         } else if (key === ADMIN_SECRET_KEY) {
-            // Show Admin Panel
             adminView.style.display = 'block';
         } else if (placeId) {
-            // Show Launcher Screen
             launcherView.style.display = 'block';
             
             const launcherInfo = document.getElementById('launcher-info');
@@ -413,18 +432,57 @@
             }
             launcherInfo.innerHTML = infoHTML;
 
-            // Generate protocol URL
-            let launchUrl = `roblox://experiences/start?placeId=${placeId}`;
+            // Generate protocol URL (incorporating launchData validation key)
+            let launchUrl = `roblox://experiences/start?placeId=${placeId}&launchData=${LAUNCH_KEY}`;
             if (accessCode) {
                 launchUrl += `&accessCode=${accessCode}`;
             }
             launchBtn.href = launchUrl;
+
+            // Initialize bot/human detection check
+            initHumanVerification();
         } else {
-            // Show Help Screen
             errorView.style.display = 'block';
         }
 
-        // --- 3. ADMIN PANEL FUNCTIONS ---
+        // --- 3. HUMAN INTERACTION VERIFICATION ---
+        function initHumanVerification() {
+            let verified = false;
+            const statusBox = document.getElementById('verification-status');
+            const launchBtn = document.getElementById('launch-btn');
+
+            function handleVerification() {
+                if (!verified) {
+                    verified = true;
+                    
+                    // Update verification badge state to Success (Green)
+                    statusBox.style.background = "rgba(0, 230, 118, 0.08)";
+                    statusBox.style.borderColor = "rgba(0, 230, 118, 0.2)";
+                    statusBox.style.color = "#00e676";
+                    statusBox.innerHTML = `
+                        <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; fill: currentColor;">
+                            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                        </svg>
+                        <span>Verified Browser Connection</span>
+                    `;
+
+                    // Enable the launch button
+                    launchBtn.classList.remove('disabled');
+
+                    // Remove event listeners once human behavior is verified
+                    window.removeEventListener('mousemove', handleVerification);
+                    window.removeEventListener('touchstart', handleVerification);
+                    window.removeEventListener('keydown', handleVerification);
+                }
+            }
+
+            // Register event listeners monitoring interaction indicators
+            window.addEventListener('mousemove', handleVerification);
+            window.addEventListener('touchstart', handleVerification);
+            window.addEventListener('keydown', handleVerification);
+        }
+
+        // --- 4. ADMIN PANEL FUNCTIONS ---
         function generateLink() {
             const placeInput = document.getElementById('input-place').value.trim();
             const codeInput = document.getElementById('input-code').value.trim();
@@ -436,7 +494,6 @@
                 return;
             }
 
-            // Construct the path for the dynamic launcher URL
             const baseUrl = window.location.origin + window.location.pathname;
             let generatedUrl = `${baseUrl}?placeId=${placeInput}`;
             
@@ -457,7 +514,6 @@
             });
         }
 
-        // Simulates revoking/restoring a link (Saves state to local browser cache)
         function manageRevocation(shouldRevoke) {
             const targetId = document.getElementById('input-revoke-id').value.trim();
             
@@ -468,10 +524,10 @@
 
             if (shouldRevoke) {
                 localStorage.setItem(`revoked_${targetId}`, "true");
-                alert(`Place ID ${targetId} has been local-revoked. Visitors loading this ID on this device will see the Revoked screen.`);
+                alert(`Place ID ${targetId} has been local-revoked.`);
             } else {
                 localStorage.removeItem(`revoked_${targetId}`);
-                alert(`Place ID ${targetId} has been restored on this device.`);
+                alert(`Place ID ${targetId} has been restored.`);
             }
         }
     </script>
