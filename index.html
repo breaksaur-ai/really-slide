@@ -12,6 +12,7 @@
             --card-bg: rgba(255, 255, 255, 0.03);
             --border-color: rgba(255, 255, 255, 0.08);
             --primary-glow: linear-gradient(135deg, #00b06f 0%, #00e676 100%);
+            --red-glow: linear-gradient(135deg, #ff5252 0%, #ff1744 100%);
             --text-main: #ffffff;
             --text-secondary: #8b949e;
         }
@@ -32,7 +33,7 @@
             align-items: center;
             overflow-y: auto;
             position: relative;
-            padding: 20px 0;
+            padding: 40px 0;
         }
 
         /* Ambient Glow Background Effect */
@@ -167,10 +168,31 @@
             filter: brightness(1.1);
         }
 
+        .button.secondary {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            box-shadow: none;
+        }
+
+        .button.danger {
+            background: var(--red-glow);
+            box-shadow: 0 8px 24px rgba(255, 23, 68, 0.25);
+        }
+
+        .button.danger:hover {
+            box-shadow: 0 12px 30px rgba(255, 23, 68, 0.4);
+        }
+
         /* Form / Dashboard Styles */
         .form-group {
             text-align: left;
             margin-bottom: 20px;
+        }
+
+        .divider {
+            height: 1px;
+            background: var(--border-color);
+            margin: 30px 0;
         }
 
         label {
@@ -265,15 +287,15 @@
         <div id="admin-view" class="card" style="display: none;">
             <div class="logo-container">
                 <div class="logo-icon">
-                    <!-- Gear/Settings Icon for Admin Panel -->
                     <svg viewBox="0 0 24 24">
                         <path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/>
                     </svg>
                 </div>
                 <h1>Otx Hub</h1>
-                <p class="description">Generate configured game launch URLs for your site.</p>
+                <p class="description">Generate and manage configured game launch links.</p>
             </div>
 
+            <!-- SECTION A: LINK GENERATOR -->
             <div class="form-group">
                 <label for="input-place">Place ID (Required)</label>
                 <input type="text" id="input-place" placeholder="e.g. 1818">
@@ -289,15 +311,52 @@
             <div class="output-box" id="output-box">
                 <label>Your Generated Link:</label>
                 <div class="output-url" id="output-url"></div>
-                <button onclick="copyToClipboard()" class="button" style="padding: 10px; font-size: 13px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); box-shadow: none;">Copy Link</button>
+                <button onclick="copyToClipboard()" class="button secondary" style="padding: 10px; font-size: 13px;">Copy Link</button>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- SECTION B: MOCK REVOKE ACTIONS (LOCAL ONLY) -->
+            <div class="logo-container" style="margin-bottom: 15px;">
+                <h3>Link Management</h3>
+                <p class="description" style="font-size: 12px; margin-bottom: 10px;">Revoke generated links dynamically on this browser session.</p>
+            </div>
+
+            <div class="form-group">
+                <label for="input-revoke-id">Place ID to Revoke/Restore</label>
+                <input type="text" id="input-revoke-id" placeholder="e.g. 1818">
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-top: 10px;">
+                <button onclick="manageRevocation(true)" class="button danger" style="padding: 12px; font-size: 14px;">Revoke Link</button>
+                <button onclick="manageRevocation(false)" class="button secondary" style="padding: 12px; font-size: 14px;">Restore Link</button>
             </div>
         </div>
 
 
-        <!-- 3. ERROR / INSTRUCTIONS VIEW -->
+        <!-- 3. REVOKED LINK VIEW -->
+        <div id="revoked-view" class="card" style="display: none;">
+            <div class="logo-container">
+                <div class="logo-icon" style="background: var(--red-glow); box-shadow: 0 10px 30px rgba(255, 23, 68, 0.3);">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4.5h-2v-5h2v5z"/>
+                    </svg>
+                </div>
+                <h1>Link Invalid</h1>
+                <p class="description">This launch URL has been deactivated.</p>
+            </div>
+
+            <div class="error-message" style="text-align: center;">
+                <strong>Admin has revoked this link.</strong><br>
+                Please contact the link administrator for a new invite.
+            </div>
+        </div>
+
+
+        <!-- 4. SETUP REQUIRED VIEW -->
         <div id="error-view" class="card" style="display: none;">
             <div class="logo-container">
-                <div class="logo-icon" style="background: linear-gradient(135deg, #ff5252 0%, #ff1744 100%);">
+                <div class="logo-icon" style="background: var(--red-glow); box-shadow: 0 10px 30px rgba(255, 23, 68, 0.3);">
                     <svg viewBox="0 0 24 24">
                         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
                     </svg>
@@ -327,10 +386,17 @@
 
         const launcherView = document.getElementById('launcher-view');
         const adminView = document.getElementById('admin-view');
+        const revokedView = document.getElementById('revoked-view');
         const errorView = document.getElementById('error-view');
 
-        // Route page based on query parameters
-        if (key === ADMIN_SECRET_KEY) {
+        // Check if this specific place ID has been revoked in local storage
+        const isCurrentPlaceRevoked = placeId ? localStorage.getItem(`revoked_${placeId}`) : null;
+
+        // Route page based on parameters and local revocation status
+        if (isCurrentPlaceRevoked === "true") {
+            // Link has been revoked
+            revokedView.style.display = 'block';
+        } else if (key === ADMIN_SECRET_KEY) {
             // Show Admin Panel
             adminView.style.display = 'block';
         } else if (placeId) {
@@ -389,6 +455,24 @@
             }).catch(err => {
                 console.error("Failed to copy link: ", err);
             });
+        }
+
+        // Simulates revoking/restoring a link (Saves state to local browser cache)
+        function manageRevocation(shouldRevoke) {
+            const targetId = document.getElementById('input-revoke-id').value.trim();
+            
+            if (!targetId) {
+                alert("Please enter a Place ID to manage.");
+                return;
+            }
+
+            if (shouldRevoke) {
+                localStorage.setItem(`revoked_${targetId}`, "true");
+                alert(`Place ID ${targetId} has been local-revoked. Visitors loading this ID on this device will see the Revoked screen.`);
+            } else {
+                localStorage.removeItem(`revoked_${targetId}`);
+                alert(`Place ID ${targetId} has been restored on this device.`);
+            }
         }
     </script>
 </body>
