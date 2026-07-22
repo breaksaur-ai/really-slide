@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roblox Launcher</title>
+    <title>Roblox Utility Hub</title>
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
@@ -30,8 +30,9 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
+            overflow-y: auto;
             position: relative;
+            padding: 20px 0;
         }
 
         /* Ambient Glow Background Effect */
@@ -65,10 +66,10 @@
             position: relative;
             z-index: 1;
             width: 90%;
-            max-width: 440px;
+            max-width: 460px;
         }
 
-        .launcher-card {
+        .card {
             background: var(--card-bg);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
@@ -77,12 +78,6 @@
             padding: 40px 30px;
             text-align: center;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .launcher-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7);
         }
 
         .logo-container {
@@ -99,18 +94,6 @@
             align-items: center;
             box-shadow: 0 10px 30px rgba(0, 176, 111, 0.3);
             margin-bottom: 15px;
-            animation: pulse 2s infinite alternate;
-        }
-
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-                box-shadow: 0 10px 25px rgba(0, 176, 111, 0.25);
-            }
-            100% {
-                transform: scale(1.04);
-                box-shadow: 0 15px 35px rgba(0, 176, 111, 0.45);
-            }
         }
 
         .logo-icon svg {
@@ -160,7 +143,7 @@
             font-weight: 600;
         }
 
-        .launch-button {
+        .button {
             display: inline-flex;
             justify-content: center;
             align-items: center;
@@ -175,18 +158,63 @@
             cursor: pointer;
             text-decoration: none;
             box-shadow: 0 8px 24px rgba(0, 176, 111, 0.25);
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.2s ease;
         }
 
-        .launch-button:hover {
+        .button:hover {
             transform: translateY(-2px);
             box-shadow: 0 12px 30px rgba(0, 176, 111, 0.4);
             filter: brightness(1.1);
         }
 
-        .launch-button:active {
-            transform: translateY(0);
-            box-shadow: 0 5px 15px rgba(0, 176, 111, 0.25);
+        /* Form / Dashboard Styles */
+        .form-group {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #cbd5e1;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border-color);
+            color: white;
+            font-family: inherit;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #00e676;
+        }
+
+        .output-box {
+            margin-top: 25px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px dashed var(--border-color);
+            border-radius: 12px;
+            text-align: left;
+            display: none;
+        }
+
+        .output-url {
+            font-family: monospace;
+            font-size: 12px;
+            color: #00e676;
+            word-break: break-all;
+            margin-bottom: 10px;
+            user-select: all;
         }
 
         .error-message {
@@ -212,65 +240,155 @@
 <body>
 
     <div class="container">
-        <div class="launcher-card">
+
+        <!-- 1. USER LAUNCHER VIEW -->
+        <div id="launcher-view" class="card" style="display: none;">
             <div class="logo-container">
                 <div class="logo-icon">
                     <svg viewBox="0 0 24 24">
                         <path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2Zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2Zm4.5 3c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5Zm3-3c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5Z"/>
                     </svg>
                 </div>
-                <h1 id="title">Roblox Launcher</h1>
-                <p class="description" id="subtitle">Launch your game client directly from the browser window.</p>
+                <h1>Roblox Launcher</h1>
+                <p class="description" id="launcher-subtitle">Launch your game client directly from the browser window.</p>
             </div>
 
-            <div class="info-badges-container" id="dynamic-content">
+            <div class="info-badges-container" id="launcher-info">
                 <!-- Badges will appear here dynamically -->
             </div>
 
-            <a href="#" id="launch-btn" class="launch-button" style="display: none;">Join Experience</a>
+            <a href="#" id="launch-btn" class="button">Join Experience</a>
         </div>
+
+
+        <!-- 2. ADMIN DASHBOARD VIEW (OTX HUB) -->
+        <div id="admin-view" class="card" style="display: none;">
+            <div class="logo-container">
+                <div class="logo-icon">
+                    <!-- Gear/Settings Icon for Admin Panel -->
+                    <svg viewBox="0 0 24 24">
+                        <path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/>
+                    </svg>
+                </div>
+                <h1>Otx Hub</h1>
+                <p class="description">Generate configured game launch URLs for your site.</p>
+            </div>
+
+            <div class="form-group">
+                <label for="input-place">Place ID (Required)</label>
+                <input type="text" id="input-place" placeholder="e.g. 1818">
+            </div>
+
+            <div class="form-group">
+                <label for="input-code">Private Server Access Code (Optional)</label>
+                <input type="text" id="input-code" placeholder="e.g. access-token-string">
+            </div>
+
+            <button onclick="generateLink()" class="button" style="margin-top: 10px;">Generate Launch Link</button>
+
+            <div class="output-box" id="output-box">
+                <label>Your Generated Link:</label>
+                <div class="output-url" id="output-url"></div>
+                <button onclick="copyToClipboard()" class="button" style="padding: 10px; font-size: 13px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); box-shadow: none;">Copy Link</button>
+            </div>
+        </div>
+
+
+        <!-- 3. ERROR / INSTRUCTIONS VIEW -->
+        <div id="error-view" class="card" style="display: none;">
+            <div class="logo-container">
+                <div class="logo-icon" style="background: linear-gradient(135deg, #ff5252 0%, #ff1744 100%);">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                    </svg>
+                </div>
+                <h1>Setup Required</h1>
+                <p class="description">This page has not been configured with a target game yet.</p>
+            </div>
+
+            <div class="error-message">
+                <strong>No Active Experience:</strong><br>
+                Please load this site using a custom URL configuration or visit your Admin Dashboard to generate one.
+            </div>
+        </div>
+
     </div>
 
     <script>
-        // Retrieve placeId and accessCode from the URL query params
+        // --- 1. CONFIGURATION ---
+        // Change this string to your preferred secret key
+        const ADMIN_SECRET_KEY = "admin123";
+
+        // --- 2. URL PROCESSING ---
         const urlParams = new URLSearchParams(window.location.search);
         const placeId = urlParams.get('placeId') || urlParams.get('placeid');
         const accessCode = urlParams.get('accessCode') || urlParams.get('accesscode');
+        const key = urlParams.get('key');
 
-        const dynamicContent = document.getElementById('dynamic-content');
-        const launchBtn = document.getElementById('launch-btn');
-        const subtitle = document.getElementById('subtitle');
+        const launcherView = document.getElementById('launcher-view');
+        const adminView = document.getElementById('admin-view');
+        const errorView = document.getElementById('error-view');
 
-        if (placeId) {
-            let innerHTML = `<div class="info-badge">Place ID: <span class="accent">${placeId}</span></div>`;
+        // Route page based on query parameters
+        if (key === ADMIN_SECRET_KEY) {
+            // Show Admin Panel
+            adminView.style.display = 'block';
+        } else if (placeId) {
+            // Show Launcher Screen
+            launcherView.style.display = 'block';
             
+            const launcherInfo = document.getElementById('launcher-info');
+            const launchBtn = document.getElementById('launch-btn');
+
+            let infoHTML = `<div class="info-badge">Place ID: <span class="accent">${placeId}</span></div>`;
             if (accessCode) {
-                // Shorten displayed private server code for layout elegance
-                const shortCode = accessCode.length > 8 ? `${accessCode.substring(0, 8)}...` : accessCode;
-                innerHTML += `<div class="info-badge">Server Code: <span class="accent">${shortCode}</span></div>`;
+                const shortCode = accessCode.length > 10 ? `${accessCode.substring(0, 10)}...` : accessCode;
+                infoHTML += `<div class="info-badge">Server Code: <span class="accent">${shortCode}</span></div>`;
             }
-            
-            dynamicContent.innerHTML = innerHTML;
-            subtitle.innerText = "The game launch link is configured and ready.";
+            launcherInfo.innerHTML = infoHTML;
 
-            // Construct protocol URL
+            // Generate protocol URL
             let launchUrl = `roblox://experiences/start?placeId=${placeId}`;
             if (accessCode) {
                 launchUrl += `&accessCode=${accessCode}`;
             }
-
-            // Set URL parameters onto button link
             launchBtn.href = launchUrl;
-            launchBtn.style.display = 'inline-flex';
         } else {
-            // Inform users how to format URL parameters to use this launcher
-            subtitle.innerText = "No launch targets are currently loaded.";
-            dynamicContent.innerHTML = `
-                <div class="error-message">
-                    <strong>Launch link configuration required:</strong><br>
-                    Add <code>?placeId=YOUR_GAME_ID</code> to the end of your browser's address bar to generate the launch action.
-                </div>
-            `;
+            // Show Help Screen
+            errorView.style.display = 'block';
+        }
+
+        // --- 3. ADMIN PANEL FUNCTIONS ---
+        function generateLink() {
+            const placeInput = document.getElementById('input-place').value.trim();
+            const codeInput = document.getElementById('input-code').value.trim();
+            const outputBox = document.getElementById('output-box');
+            const outputUrl = document.getElementById('output-url');
+
+            if (!placeInput) {
+                alert("Please enter a Place ID.");
+                return;
+            }
+
+            // Construct the path for the dynamic launcher URL
+            const baseUrl = window.location.origin + window.location.pathname;
+            let generatedUrl = `${baseUrl}?placeId=${placeInput}`;
+            
+            if (codeInput) {
+                generatedUrl += `&accessCode=${encodeURIComponent(codeInput)}`;
+            }
+
+            outputUrl.innerText = generatedUrl;
+            outputBox.style.display = 'block';
+        }
+
+        function copyToClipboard() {
+            const urlText = document.getElementById('output-url').innerText;
+            navigator.clipboard.writeText(urlText).then(() => {
+                alert("Link copied to clipboard!");
+            }).catch(err => {
+                console.error("Failed to copy link: ", err);
+            });
         }
     </script>
 </body>
