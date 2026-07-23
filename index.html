@@ -316,10 +316,11 @@
             </div>
 
             <div class="info-badges-container" id="launcher-info">
-                <!-- Badges will appear here dynamically (Place ID removed) -->
+                <!-- Badges will appear here dynamically -->
             </div>
 
-            <a href="#" id="launch-btn" class="button disabled">Join Experience</a>
+            <!-- Changed from <a> link to a <button> with no href -->
+            <button id="launch-btn" class="button disabled">Join Experience</button>
             
             <div class="credits-footer">Credits to ducky</div>
         </div>
@@ -460,20 +461,13 @@
             const launcherInfo = document.getElementById('launcher-info');
             const launchBtn = document.getElementById('launch-btn');
 
-            // PLACE ID BADGE REMOVED HERE (only showing private server code if present)
+            // Place ID badge is completely removed.
             let infoHTML = "";
             if (accessCode) {
                 const shortCode = accessCode.length > 10 ? `${accessCode.substring(0, 10)}...` : accessCode;
                 infoHTML += `<div class="info-badge">Server Code: <span class="accent">${shortCode}</span></div>`;
             }
             launcherInfo.innerHTML = infoHTML;
-
-            // Generate protocol URL (incorporating launchData validation key)
-            let launchUrl = `roblox://experiences/start?placeId=${placeId}&launchData=${LAUNCH_KEY}`;
-            if (accessCode) {
-                launchUrl += `&accessCode=${accessCode}`;
-            }
-            launchBtn.href = launchUrl;
 
             // Initialize bot/human detection check
             initHumanVerification();
@@ -482,14 +476,15 @@
         }
 
         // --- 3. HUMAN INTERACTION VERIFICATION ---
+        let verifiedHuman = false;
+
         function initHumanVerification() {
-            let verified = false;
             const statusBox = document.getElementById('verification-status');
             const launchBtn = document.getElementById('launch-btn');
 
             function handleVerification() {
-                if (!verified) {
-                    verified = true;
+                if (!verifiedHuman) {
+                    verifiedHuman = true;
                     
                     // Update verification badge state to Success (Green)
                     statusBox.style.background = "rgba(0, 230, 118, 0.08)";
@@ -505,6 +500,11 @@
                     // Enable the launch button
                     launchBtn.classList.remove('disabled');
 
+                    // Bind dynamic redirection trigger (Executed only on human click action)
+                    launchBtn.addEventListener('click', function() {
+                        triggerAppLaunch();
+                    });
+
                     // Remove event listeners once human behavior is verified
                     window.removeEventListener('mousemove', handleVerification);
                     window.removeEventListener('touchstart', handleVerification);
@@ -516,6 +516,18 @@
             window.addEventListener('mousemove', handleVerification);
             window.addEventListener('touchstart', handleVerification);
             window.addEventListener('keydown', handleVerification);
+        }
+
+        // Constructs and runs redirect protocol ONLY inside memory upon click
+        function triggerAppLaunch() {
+            if (verifiedHuman && placeId) {
+                let launchUrl = `roblox://experiences/start?placeId=${placeId}&launchData=${LAUNCH_KEY}`;
+                if (accessCode) {
+                    launchUrl += `&accessCode=${encodeURIComponent(accessCode)}`;
+                }
+                // Redirect the browser window to trigger the protocol launcher
+                window.location.href = launchUrl;
+            }
         }
 
         // --- 4. ADMIN PANEL FUNCTIONS ---
