@@ -316,7 +316,7 @@
             </div>
 
             <div class="info-badges-container" id="launcher-info">
-                <!-- Badges will appear here dynamically -->
+                <!-- Badges will appear here dynamically (Place ID removed) -->
             </div>
 
             <a href="#" id="launch-btn" class="button disabled">Join Experience</a>
@@ -449,7 +449,7 @@
 
         const isCurrentPlaceRevoked = placeId ? localStorage.getItem(`revoked_${placeId}`) : null;
 
-        // Route page based on parameters and local revocation status
+        // Route page based on query parameters and local revocation status
         if (isCurrentPlaceRevoked === "true") {
             revokedView.style.display = 'block';
         } else if (key === ADMIN_SECRET_KEY) {
@@ -460,7 +460,8 @@
             const launcherInfo = document.getElementById('launcher-info');
             const launchBtn = document.getElementById('launch-btn');
 
-            let infoHTML = `<div class="info-badge">Place ID: <span class="accent">${placeId}</span></div>`;
+            // PLACE ID BADGE REMOVED HERE (only showing private server code if present)
+            let infoHTML = "";
             if (accessCode) {
                 const shortCode = accessCode.length > 10 ? `${accessCode.substring(0, 10)}...` : accessCode;
                 infoHTML += `<div class="info-badge">Server Code: <span class="accent">${shortCode}</span></div>`;
