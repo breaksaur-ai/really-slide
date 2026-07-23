@@ -428,7 +428,7 @@
 
         // --- 2. URL PROCESSING ---
         const urlParams = new URLSearchParams(window.location.search);
-        const placeId = urlParams.get('placeId') || urlParams.get('placeid');
+        const encodedId = urlParams.get('id'); // Scrambled Base64 ID (e.g. ?id=MTgxOA==)
         const accessCode = urlParams.get('accessCode') || urlParams.get('accesscode');
         const key = urlParams.get('key');
 
@@ -437,14 +437,24 @@
         const revokedView = document.getElementById('revoked-view');
         const errorView = document.getElementById('error-view');
 
+        // Decode the Place ID from Base64
+        let placeId = "";
+        try {
+            if (encodedId) {
+                placeId = atob(encodedId); // Converts "MTgxOA==" back to "1818"
+            }
+        } catch (e) {
+            console.error("Invalid ID format");
+        }
+
         const isCurrentPlaceRevoked = placeId ? localStorage.getItem(`revoked_${placeId}`) : null;
 
-        // Route page based on query parameters and local revocation status
+        // Route page based on parameters and local revocation status
         if (isCurrentPlaceRevoked === "true") {
             revokedView.style.display = 'block';
         } else if (key === ADMIN_SECRET_KEY) {
             adminView.style.display = 'block';
-        } else if (placeId) {
+        } else if (placeId && !isNaN(placeId)) {
             launcherView.style.display = 'block';
             
             const launcherInfo = document.getElementById('launcher-info');
@@ -514,13 +524,16 @@
             const outputBox = document.getElementById('output-box');
             const outputUrl = document.getElementById('output-url');
 
-            if (!placeInput) {
-                alert("Please enter a Place ID.");
+            if (!placeInput || isNaN(placeInput)) {
+                alert("Please enter a valid numeric Place ID.");
                 return;
             }
 
+            // Scramble (Encode) the ID to Base64 to hide it from bots
+            const base64Id = btoa(placeInput);
+
             const baseUrl = window.location.origin + window.location.pathname;
-            let generatedUrl = `${baseUrl}?placeId=${placeInput}`;
+            let generatedUrl = `${baseUrl}?id=${base64Id}`;
             
             if (codeInput) {
                 generatedUrl += `&accessCode=${encodeURIComponent(codeInput)}`;
@@ -542,8 +555,8 @@
         function manageRevocation(shouldRevoke) {
             const targetId = document.getElementById('input-revoke-id').value.trim();
             
-            if (!targetId) {
-                alert("Please enter a Place ID to manage.");
+            if (!targetId || isNaN(targetId)) {
+                alert("Please enter a valid numeric Place ID to manage.");
                 return;
             }
 
