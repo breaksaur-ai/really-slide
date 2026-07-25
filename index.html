@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Roblox Utility Hub</title>
-    <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -17,11 +16,7 @@
             --text-secondary: #8b949e;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             font-family: 'Outfit', sans-serif;
@@ -36,39 +31,29 @@
             padding: 40px 0;
         }
 
-        /* Ambient Glow Background Effect */
         body::before {
             content: '';
             position: absolute;
-            width: 300px;
-            height: 300px;
+            width: 300px; height: 300px;
             background: #00b06f;
             filter: blur(150px);
             opacity: 0.12;
-            top: 20%;
-            left: 20%;
+            top: 20%; left: 20%;
             z-index: 0;
         }
 
         body::after {
             content: '';
             position: absolute;
-            width: 300px;
-            height: 300px;
+            width: 300px; height: 300px;
             background: #00e676;
             filter: blur(150px);
             opacity: 0.12;
-            bottom: 20%;
-            right: 20%;
+            bottom: 20%; right: 20%;
             z-index: 0;
         }
 
-        .container {
-            position: relative;
-            z-index: 1;
-            width: 90%;
-            max-width: 460px;
-        }
+        .container { position: relative; z-index: 1; width: 90%; max-width: 460px; }
 
         .card {
             background: var(--card-bg);
@@ -82,13 +67,10 @@
             position: relative;
         }
 
-        .logo-container {
-            margin-bottom: 25px;
-        }
+        .logo-container { margin-bottom: 25px; }
 
         .logo-icon {
-            width: 70px;
-            height: 70px;
+            width: 70px; height: 70px;
             background: var(--primary-glow);
             border-radius: 18px;
             display: inline-flex;
@@ -98,11 +80,7 @@
             margin-bottom: 15px;
         }
 
-        .logo-icon svg {
-            width: 36px;
-            height: 36px;
-            fill: white;
-        }
+        .logo-icon svg { width: 36px; height: 36px; fill: white; }
 
         h1 {
             font-size: 26px;
@@ -140,12 +118,8 @@
             gap: 6px;
         }
 
-        .info-badge span.accent {
-            color: #00e676;
-            font-weight: 600;
-        }
+        .info-badge span.accent { color: #00e676; font-weight: 600; }
 
-        /* Human Verification Status Styles */
         .verification-badge {
             background: rgba(255, 193, 7, 0.08);
             border: 1px solid rgba(255, 193, 7, 0.2);
@@ -177,6 +151,7 @@
             text-decoration: none;
             box-shadow: 0 8px 24px rgba(0, 176, 111, 0.25);
             transition: all 0.2s ease;
+            font-family: inherit;
         }
 
         .button:hover {
@@ -185,12 +160,9 @@
             filter: brightness(1.1);
         }
 
-        .button.disabled {
-            opacity: 0.4;
-            pointer-events: none;
-            cursor: not-allowed;
-            box-shadow: none;
-        }
+        .button:focus-visible { outline: 2px solid #00e676; outline-offset: 3px; }
+
+        .button.disabled { opacity: 0.4; pointer-events: none; cursor: not-allowed; box-shadow: none; }
 
         .button.secondary {
             background: rgba(255, 255, 255, 0.05);
@@ -198,26 +170,11 @@
             box-shadow: none;
         }
 
-        .button.danger {
-            background: var(--red-glow);
-            box-shadow: 0 8px 24px rgba(255, 23, 68, 0.25);
-        }
+        .button.danger { background: var(--red-glow); box-shadow: 0 8px 24px rgba(255, 23, 68, 0.25); }
+        .button.danger:hover { box-shadow: 0 12px 30px rgba(255, 23, 68, 0.4); }
 
-        .button.danger:hover {
-            box-shadow: 0 12px 30px rgba(255, 23, 68, 0.4);
-        }
-
-        /* Form / Dashboard Styles */
-        .form-group {
-            text-align: left;
-            margin-bottom: 20px;
-        }
-
-        .divider {
-            height: 1px;
-            background: var(--border-color);
-            margin: 30px 0;
-        }
+        .form-group { text-align: left; margin-bottom: 20px; }
+        .divider { height: 1px; background: var(--border-color); margin: 30px 0; }
 
         label {
             display: block;
@@ -226,6 +183,8 @@
             color: #cbd5e1;
             margin-bottom: 8px;
         }
+
+        .hint { font-size: 11px; color: var(--text-secondary); margin-top: 6px; line-height: 1.4; }
 
         input {
             width: 100%;
@@ -239,10 +198,7 @@
             transition: border-color 0.2s;
         }
 
-        input:focus {
-            outline: none;
-            border-color: #00e676;
-        }
+        input:focus { outline: none; border-color: #00e676; }
 
         .output-box {
             margin-top: 25px;
@@ -274,7 +230,30 @@
             text-align: left;
         }
 
-        /* Credits Style */
+        .notice {
+            display: none;
+            color: #ffc107;
+            background: rgba(255, 193, 7, 0.07);
+            border: 1px solid rgba(255, 193, 7, 0.18);
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 12.5px;
+            line-height: 1.5;
+            text-align: left;
+            margin-top: 15px;
+        }
+
+        .fallback-link {
+            display: none;
+            margin-top: 14px;
+            font-size: 12.5px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .fallback-link a { color: #00e676; text-decoration: none; font-weight: 600; }
+        .fallback-link a:hover { text-decoration: underline; }
+
         .credits-footer {
             margin-top: 30px;
             font-size: 11px;
@@ -286,8 +265,11 @@
             transition: opacity 0.2s ease;
         }
 
-        .credits-footer:hover {
-            opacity: 0.8;
+        .credits-footer:hover { opacity: 0.8; }
+
+        @media (prefers-reduced-motion: reduce) {
+            .button, .credits-footer { transition: none; }
+            .button:hover { transform: none; }
         }
     </style>
 </head>
@@ -307,21 +289,21 @@
                 <p class="description" id="launcher-subtitle">Launch your game client directly from the browser window.</p>
             </div>
 
-            <!-- Human Verification Prompts -->
             <div id="verification-status" class="verification-badge">
                 <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; fill: currentColor;">
                     <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
                 </svg>
-                <span>Please move your mouse or tap the screen to verify.</span>
+                <span>Move your mouse or tap the screen to continue.</span>
             </div>
 
-            <div class="info-badges-container" id="launcher-info">
-                <!-- Badges will appear here dynamically -->
-            </div>
+            <div class="info-badges-container" id="launcher-info"></div>
 
-            <!-- Changed from <a> link to a <button> with no href -->
             <button id="launch-btn" class="button disabled">Join Experience</button>
-            
+
+            <div class="fallback-link" id="fallback-link">
+                Nothing happened? <a id="web-fallback" href="#" target="_blank" rel="noopener">Open on the Roblox website</a> and press Play there.
+            </div>
+
             <div class="credits-footer">Credits to ducky</div>
         </div>
 
@@ -338,43 +320,45 @@
                 <p class="description">Generate and manage configured game launch links.</p>
             </div>
 
-            <!-- SECTION A: LINK GENERATOR -->
             <div class="form-group">
-                <label for="input-place">Place ID (Required)</label>
-                <input type="text" id="input-place" placeholder="e.g. 1818">
+                <label for="input-place">Place ID or game URL</label>
+                <input type="text" id="input-place" placeholder="1818  —  or paste the full game link">
+                <p class="hint">Paste a full roblox.com/games/... link and the ID is pulled out for you.</p>
             </div>
 
             <div class="form-group">
-                <label for="input-code">Private Server Access Code (Optional)</label>
-                <input type="text" id="input-code" placeholder="e.g. access-token-string">
+                <label for="input-code">Private server link code (optional)</label>
+                <input type="text" id="input-code" placeholder="32-character code, or paste the server link">
+                <p class="hint">This is the value after <code>privateServerLinkCode=</code> in the server's URL.</p>
             </div>
 
-            <button onclick="generateLink()" class="button" style="margin-top: 10px;">Generate Launch Link</button>
+            <button onclick="generateLink()" class="button" style="margin-top: 10px;">Generate launch link</button>
+
+            <div class="notice" id="admin-notice"></div>
 
             <div class="output-box" id="output-box">
-                <label>Your Generated Link:</label>
+                <label>Your generated link</label>
                 <div class="output-url" id="output-url"></div>
-                <button onclick="copyToClipboard()" class="button secondary" style="padding: 10px; font-size: 13px;">Copy Link</button>
+                <button onclick="copyToClipboard()" class="button secondary" style="padding: 10px; font-size: 13px;">Copy link</button>
             </div>
 
             <div class="divider"></div>
 
-            <!-- SECTION B: MOCK REVOKE ACTIONS (LOCAL ONLY) -->
             <div class="logo-container" style="margin-bottom: 15px;">
-                <h3>Link Management</h3>
-                <p class="description" style="font-size: 12px; margin-bottom: 10px;">Revoke generated links dynamically on this browser session.</p>
+                <h3>Link management</h3>
+                <p class="description" style="font-size: 12px; margin-bottom: 10px;">Revoke generated links on this browser only.</p>
             </div>
 
             <div class="form-group">
-                <label for="input-revoke-id">Place ID to Revoke/Restore</label>
+                <label for="input-revoke-id">Place ID to revoke or restore</label>
                 <input type="text" id="input-revoke-id" placeholder="e.g. 1818">
             </div>
 
             <div style="display: flex; gap: 10px; margin-top: 10px;">
-                <button onclick="manageRevocation(true)" class="button danger" style="padding: 12px; font-size: 14px;">Revoke Link</button>
-                <button onclick="manageRevocation(false)" class="button secondary" style="padding: 12px; font-size: 14px;">Restore Link</button>
+                <button onclick="manageRevocation(true)" class="button danger" style="padding: 12px; font-size: 14px;">Revoke link</button>
+                <button onclick="manageRevocation(false)" class="button secondary" style="padding: 12px; font-size: 14px;">Restore link</button>
             </div>
-            
+
             <div class="credits-footer">Credits to ducky</div>
         </div>
 
@@ -387,15 +371,15 @@
                         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4.5h-2v-5h2v5z"/>
                     </svg>
                 </div>
-                <h1>Link Invalid</h1>
+                <h1>Link invalid</h1>
                 <p class="description">This launch URL has been deactivated.</p>
             </div>
 
             <div class="error-message" style="text-align: center;">
-                <strong>Admin has revoked this link.</strong><br>
-                Please contact the link administrator for a new invite.
+                <strong>The admin revoked this link.</strong><br>
+                Ask them for a new invite.
             </div>
-            
+
             <div class="credits-footer">Credits to ducky</div>
         </div>
 
@@ -408,15 +392,15 @@
                         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
                     </svg>
                 </div>
-                <h1>Setup Required</h1>
-                <p class="description">This page has not been configured with a target game yet.</p>
+                <h1>Setup required</h1>
+                <p class="description">This page has no target game yet.</p>
             </div>
 
             <div class="error-message">
-                <strong>No Active Experience:</strong><br>
-                Please load this site using a custom URL configuration or visit your Admin Dashboard to generate one.
+                <strong>No active experience.</strong><br>
+                Load this page with a generated link, or open the admin dashboard to make one.
             </div>
-            
+
             <div class="credits-footer">Credits to ducky</div>
         </div>
 
@@ -425,12 +409,54 @@
     <script>
         // --- 1. CONFIGURATION ---
         const ADMIN_SECRET_KEY = "admin123";
-        const LAUNCH_KEY = "AuthorizedFromOtx"; // Hidden verification key passed to Roblox
 
-        // --- 2. URL PROCESSING ---
+        // --- 2. HELPERS ---
+
+        // Pull a place ID out of raw input or a full Roblox URL.
+        function parsePlaceId(raw) {
+            raw = (raw || "").trim();
+            if (!raw) return "";
+            const fromUrl = raw.match(/(?:games|place)\D*?(\d{5,})/i);
+            if (fromUrl) return fromUrl[1];
+            const digits = raw.match(/^(\d+)$/);
+            return digits ? digits[1] : "";
+        }
+
+        // Work out what kind of code the user pasted.
+        // Returns { code, kind } where kind is 'link', 'legacy', 'share' or 'unknown'.
+        function parseServerCode(raw) {
+            raw = (raw || "").trim();
+            if (!raw) return null;
+
+            const fromUrl = raw.match(/privateServerLinkCode=([A-Za-z0-9_-]+)/i);
+            if (fromUrl) return { code: fromUrl[1], kind: "link" };
+
+            const shareUrl = raw.match(/roblox\.com\/share\?[^\s]*code=([A-Za-z0-9_-]+)/i);
+            if (shareUrl) return { code: shareUrl[1], kind: "share" };
+
+            // Legacy VIP server GUID (8-4-4-4-12)
+            if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(raw)) {
+                return { code: raw, kind: "legacy" };
+            }
+
+            // Standard private server link code: 32 hex characters
+            if (/^[0-9a-f]{32}$/i.test(raw)) return { code: raw, kind: "link" };
+
+            // A long run of digits is a share-link ID, not a usable code
+            if (/^\d{12,}$/.test(raw)) return { code: raw, kind: "share-id" };
+
+            return { code: raw, kind: "unknown" };
+        }
+
+        // --- 3. URL PROCESSING ---
         const urlParams = new URLSearchParams(window.location.search);
-        const encodedId = urlParams.get('id'); // Scrambled Base64 ID (e.g. ?id=MTgxOA==)
-        const accessCode = urlParams.get('accessCode') || urlParams.get('accesscode');
+        const encodedId = urlParams.get('id');
+        // Accept every spelling this page has ever generated
+        const rawCode = urlParams.get('linkCode')
+            || urlParams.get('accessCode')
+            || urlParams.get('accesscode')
+            || "";
+        const codeKind = urlParams.get('codeKind') || "";
         const key = urlParams.get('key');
 
         const launcherView = document.getElementById('launcher-view');
@@ -438,44 +464,44 @@
         const revokedView = document.getElementById('revoked-view');
         const errorView = document.getElementById('error-view');
 
-        // Decode the Place ID from Base64
         let placeId = "";
         try {
-            if (encodedId) {
-                placeId = atob(encodedId); // Converts "MTgxOA==" back to "1818"
-            }
+            if (encodedId) placeId = atob(encodedId).trim();
         } catch (e) {
-            console.error("Invalid ID format");
+            placeId = "";
         }
+        if (!/^\d+$/.test(placeId)) placeId = "";
 
         const isCurrentPlaceRevoked = placeId ? localStorage.getItem(`revoked_${placeId}`) : null;
 
-        // Route page based on query parameters and local revocation status
         if (isCurrentPlaceRevoked === "true") {
             revokedView.style.display = 'block';
         } else if (key === ADMIN_SECRET_KEY) {
             adminView.style.display = 'block';
-        } else if (placeId && !isNaN(placeId)) {
+        } else if (placeId) {
             launcherView.style.display = 'block';
-            
+
             const launcherInfo = document.getElementById('launcher-info');
-            const launchBtn = document.getElementById('launch-btn');
-
-            // Place ID badge is completely removed.
-            let infoHTML = "";
-            if (accessCode) {
-                const shortCode = accessCode.length > 10 ? `${accessCode.substring(0, 10)}...` : accessCode;
-                infoHTML += `<div class="info-badge">Server Code: <span class="accent">${shortCode}</span></div>`;
+            if (rawCode) {
+                const shortCode = rawCode.length > 10 ? `${rawCode.substring(0, 10)}…` : rawCode;
+                launcherInfo.innerHTML =
+                    `<div class="info-badge">Server code: <span class="accent">${shortCode}</span></div>`;
             }
-            launcherInfo.innerHTML = infoHTML;
 
-            // Initialize bot/human detection check
+            // Build the website fallback now so it's ready if the app doesn't open
+            const fallback = document.getElementById('web-fallback');
+            let webUrl = `https://www.roblox.com/games/${placeId}`;
+            if (rawCode && codeKind !== 'legacy') {
+                webUrl += `?privateServerLinkCode=${encodeURIComponent(rawCode)}`;
+            }
+            fallback.href = webUrl;
+
             initHumanVerification();
         } else {
             errorView.style.display = 'block';
         }
 
-        // --- 3. HUMAN INTERACTION VERIFICATION ---
+        // --- 4. HUMAN INTERACTION VERIFICATION ---
         let verifiedHuman = false;
 
         function initHumanVerification() {
@@ -483,73 +509,93 @@
             const launchBtn = document.getElementById('launch-btn');
 
             function handleVerification() {
-                if (!verifiedHuman) {
-                    verifiedHuman = true;
-                    
-                    // Update verification badge state to Success (Green)
-                    statusBox.style.background = "rgba(0, 230, 118, 0.08)";
-                    statusBox.style.borderColor = "rgba(0, 230, 118, 0.2)";
-                    statusBox.style.color = "#00e676";
-                    statusBox.innerHTML = `
-                        <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; fill: currentColor;">
-                            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                        </svg>
-                        <span>Verified Browser Connection</span>
-                    `;
+                if (verifiedHuman) return;
+                verifiedHuman = true;
 
-                    // Enable the launch button
-                    launchBtn.classList.remove('disabled');
+                statusBox.style.background = "rgba(0, 230, 118, 0.08)";
+                statusBox.style.borderColor = "rgba(0, 230, 118, 0.2)";
+                statusBox.style.color = "#00e676";
+                statusBox.innerHTML = `
+                    <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; fill: currentColor;">
+                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                    </svg>
+                    <span>Verified browser connection</span>
+                `;
 
-                    // Bind dynamic redirection trigger (Executed only on human click action)
-                    launchBtn.addEventListener('click', function() {
-                        triggerAppLaunch();
-                    });
+                launchBtn.classList.remove('disabled');
+                launchBtn.addEventListener('click', triggerAppLaunch);
 
-                    // Remove event listeners once human behavior is verified
-                    window.removeEventListener('mousemove', handleVerification);
-                    window.removeEventListener('touchstart', handleVerification);
-                    window.removeEventListener('keydown', handleVerification);
-                }
+                window.removeEventListener('mousemove', handleVerification);
+                window.removeEventListener('touchstart', handleVerification);
+                window.removeEventListener('keydown', handleVerification);
             }
 
-            // Register event listeners monitoring interaction indicators
             window.addEventListener('mousemove', handleVerification);
             window.addEventListener('touchstart', handleVerification);
             window.addEventListener('keydown', handleVerification);
         }
 
-        // Constructs and runs redirect protocol ONLY inside memory upon click
         function triggerAppLaunch() {
-            if (verifiedHuman && placeId) {
-                let launchUrl = `roblox://experiences/start?placeId=${placeId}&launchData=${LAUNCH_KEY}`;
-                if (accessCode) {
-                    launchUrl += `&accessCode=${encodeURIComponent(accessCode)}`;
-                }
-                // Redirect the browser window to trigger the protocol launcher
-                window.location.href = launchUrl;
+            if (!verifiedHuman || !placeId) return;
+
+            // THE FIX: private servers use linkCode, not accessCode.
+            // accessCode is only for legacy VIP-server GUIDs.
+            let launchUrl = `roblox://experiences/start?placeId=${placeId}`;
+            if (rawCode) {
+                const param = (codeKind === 'legacy') ? 'accessCode' : 'linkCode';
+                launchUrl += `&${param}=${encodeURIComponent(rawCode)}`;
             }
+
+            window.location.href = launchUrl;
+
+            // If the protocol handler never fires, offer the website route
+            setTimeout(() => {
+                document.getElementById('fallback-link').style.display = 'block';
+            }, 2500);
         }
 
-        // --- 4. ADMIN PANEL FUNCTIONS ---
+        // --- 5. ADMIN PANEL FUNCTIONS ---
+        function showNotice(html) {
+            const box = document.getElementById('admin-notice');
+            if (!html) { box.style.display = 'none'; box.innerHTML = ''; return; }
+            box.innerHTML = html;
+            box.style.display = 'block';
+        }
+
         function generateLink() {
-            const placeInput = document.getElementById('input-place').value.trim();
-            const codeInput = document.getElementById('input-code').value.trim();
+            const placeId = parsePlaceId(document.getElementById('input-place').value);
+            const parsed = parseServerCode(document.getElementById('input-code').value);
             const outputBox = document.getElementById('output-box');
             const outputUrl = document.getElementById('output-url');
 
-            if (!placeInput || isNaN(placeInput)) {
-                alert("Please enter a valid numeric Place ID.");
+            showNotice(null);
+            outputBox.style.display = 'none';
+
+            if (!placeId) {
+                showNotice("<strong>Place ID missing.</strong> Enter the number from the game's address, like the 1818 in roblox.com/games/1818/Name — or paste the whole link and it'll be read for you.");
                 return;
             }
 
-            // Scramble (Encode) the ID to Base64 to hide it from bots
-            const base64Id = btoa(placeInput);
+            if (parsed && parsed.kind === 'share-id') {
+                showNotice("<strong>That's a share-link ID, not a server code.</strong> A private server code is 32 characters of letters and numbers. Open the share link while signed in, wait for it to redirect, then copy the value after <code>privateServerLinkCode=</code> in the address bar.");
+                return;
+            }
 
+            if (parsed && parsed.kind === 'share') {
+                showNotice("<strong>That share link needs resolving first.</strong> Open it in a signed-in browser, let it redirect to the game page, then copy the value after <code>privateServerLinkCode=</code> and paste that here instead.");
+                return;
+            }
+
+            const base64Id = btoa(placeId);
             const baseUrl = window.location.origin + window.location.pathname;
             let generatedUrl = `${baseUrl}?id=${base64Id}`;
-            
-            if (codeInput) {
-                generatedUrl += `&accessCode=${encodeURIComponent(codeInput)}`;
+
+            if (parsed) {
+                generatedUrl += `&linkCode=${encodeURIComponent(parsed.code)}`;
+                if (parsed.kind === 'legacy') generatedUrl += `&codeKind=legacy`;
+                if (parsed.kind === 'unknown') {
+                    showNotice("Heads up: that code isn't the usual 32-character format, so it may not work. The link was still generated.");
+                }
             }
 
             outputUrl.innerText = generatedUrl;
@@ -559,26 +605,26 @@
         function copyToClipboard() {
             const urlText = document.getElementById('output-url').innerText;
             navigator.clipboard.writeText(urlText).then(() => {
-                alert("Link copied to clipboard!");
-            }).catch(err => {
-                console.error("Failed to copy link: ", err);
+                showNotice("Link copied.");
+            }).catch(() => {
+                showNotice("Couldn't copy automatically — select the link above and copy it manually.");
             });
         }
 
         function manageRevocation(shouldRevoke) {
-            const targetId = document.getElementById('input-revoke-id').value.trim();
-            
-            if (!targetId || isNaN(targetId)) {
-                alert("Please enter a valid numeric Place ID to manage.");
+            const targetId = parsePlaceId(document.getElementById('input-revoke-id').value);
+
+            if (!targetId) {
+                showNotice("Enter a numeric Place ID to revoke or restore.");
                 return;
             }
 
             if (shouldRevoke) {
                 localStorage.setItem(`revoked_${targetId}`, "true");
-                alert(`Place ID ${targetId} has been local-revoked.`);
+                showNotice(`Place ID ${targetId} is revoked on this browser.`);
             } else {
                 localStorage.removeItem(`revoked_${targetId}`);
-                alert(`Place ID ${targetId} has been restored.`);
+                showNotice(`Place ID ${targetId} is restored.`);
             }
         }
     </script>
