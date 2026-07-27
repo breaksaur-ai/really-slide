@@ -15,9 +15,7 @@
             --text-main: #ffffff;
             --text-secondary: #8b949e;
         }
-
         * { box-sizing: border-box; margin: 0; padding: 0; }
-
         body {
             font-family: 'Outfit', sans-serif;
             background-color: var(--bg-color);
@@ -30,7 +28,6 @@
             position: relative;
             padding: 40px 0;
         }
-
         body::before {
             content: '';
             position: absolute;
@@ -41,7 +38,6 @@
             top: 20%; left: 20%;
             z-index: 0;
         }
-
         body::after {
             content: '';
             position: absolute;
@@ -52,9 +48,7 @@
             bottom: 20%; right: 20%;
             z-index: 0;
         }
-
         .container { position: relative; z-index: 1; width: 90%; max-width: 460px; }
-
         .card {
             background: var(--card-bg);
             backdrop-filter: blur(20px);
@@ -66,9 +60,7 @@
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
             position: relative;
         }
-
         .logo-container { margin-bottom: 25px; }
-
         .logo-icon {
             width: 70px; height: 70px;
             background: var(--primary-glow);
@@ -79,9 +71,7 @@
             box-shadow: 0 10px 30px rgba(0, 176, 111, 0.3);
             margin-bottom: 15px;
         }
-
         .logo-icon svg { width: 36px; height: 36px; fill: white; }
-
         h1 {
             font-size: 26px;
             font-weight: 800;
@@ -91,14 +81,12 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-
         .description {
             font-size: 14px;
             color: var(--text-secondary);
             margin-bottom: 25px;
             line-height: 1.5;
         }
-
         .info-badges-container {
             display: flex;
             flex-direction: column;
@@ -106,7 +94,6 @@
             align-items: center;
             margin-bottom: 30px;
         }
-
         .info-badge {
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid var(--border-color);
@@ -117,9 +104,7 @@
             display: inline-flex;
             gap: 6px;
         }
-
         .info-badge span.accent { color: #00e676; font-weight: 600; }
-
         .verification-badge {
             background: rgba(255, 193, 7, 0.08);
             border: 1px solid rgba(255, 193, 7, 0.2);
@@ -134,7 +119,6 @@
             gap: 8px;
             margin-bottom: 25px;
         }
-
         .button {
             display: inline-flex;
             justify-content: center;
@@ -153,29 +137,22 @@
             transition: all 0.2s ease;
             font-family: inherit;
         }
-
         .button:hover {
             transform: translateY(-2px);
             box-shadow: 0 12px 30px rgba(0, 176, 111, 0.4);
             filter: brightness(1.1);
         }
-
         .button:focus-visible { outline: 2px solid #00e676; outline-offset: 3px; }
-
         .button.disabled { opacity: 0.4; pointer-events: none; cursor: not-allowed; box-shadow: none; }
-
         .button.secondary {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--border-color);
             box-shadow: none;
         }
-
         .button.danger { background: var(--red-glow); box-shadow: 0 8px 24px rgba(255, 23, 68, 0.25); }
         .button.danger:hover { box-shadow: 0 12px 30px rgba(255, 23, 68, 0.4); }
-
         .form-group { text-align: left; margin-bottom: 20px; }
         .divider { height: 1px; background: var(--border-color); margin: 30px 0; }
-
         label {
             display: block;
             font-size: 13px;
@@ -183,9 +160,7 @@
             color: #cbd5e1;
             margin-bottom: 8px;
         }
-
         .hint { font-size: 11px; color: var(--text-secondary); margin-top: 6px; line-height: 1.4; }
-
         input {
             width: 100%;
             padding: 14px;
@@ -197,9 +172,7 @@
             font-size: 14px;
             transition: border-color 0.2s;
         }
-
         input:focus { outline: none; border-color: #00e676; }
-
         .output-box {
             margin-top: 25px;
             padding: 15px;
@@ -209,7 +182,6 @@
             text-align: left;
             display: none;
         }
-
         .output-url {
             font-family: monospace;
             font-size: 12px;
@@ -218,7 +190,6 @@
             margin-bottom: 10px;
             user-select: all;
         }
-
         .error-message {
             color: #ff5252;
             background: rgba(255, 82, 82, 0.08);
@@ -229,7 +200,6 @@
             line-height: 1.5;
             text-align: left;
         }
-
         /* Inline error shown on the launcher when a username is rejected */
         .launch-error {
             display: none;
@@ -243,7 +213,6 @@
             text-align: left;
             margin-bottom: 15px;
         }
-
         .notice {
             display: none;
             color: #ffc107;
@@ -256,7 +225,6 @@
             text-align: left;
             margin-top: 15px;
         }
-
         .fallback-link {
             display: none;
             margin-top: 14px;
@@ -264,10 +232,8 @@
             color: var(--text-secondary);
             line-height: 1.5;
         }
-
         .fallback-link a { color: #00e676; text-decoration: none; font-weight: 600; }
         .fallback-link a:hover { text-decoration: underline; }
-
         .credits-footer {
             margin-top: 30px;
             font-size: 11px;
@@ -278,9 +244,7 @@
             opacity: 0.4;
             transition: opacity 0.2s ease;
         }
-
         .credits-footer:hover { opacity: 0.8; }
-
         @media (prefers-reduced-motion: reduce) {
             .button, .credits-footer { transition: none; }
             .button:hover { transform: none; }
@@ -288,9 +252,7 @@
     </style>
 </head>
 <body>
-
     <div class="container">
-
         <!-- 1. USER LAUNCHER VIEW -->
         <div id="launcher-view" class="card" style="display: none;">
             <div class="logo-container">
@@ -302,35 +264,26 @@
                 <h1>Roblox Launcher</h1>
                 <p class="description" id="launcher-subtitle">Launch your game client directly from the browser window.</p>
             </div>
-
             <div id="verification-status" class="verification-badge">
                 <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; fill: currentColor;">
                     <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
                 </svg>
                 <span>Move your mouse or tap the screen to continue.</span>
             </div>
-
             <div class="info-badges-container" id="launcher-info"></div>
-
-            <!-- Username gate: only rendered when the link carries an invite list -->
+            <!-- Username gate: always rendered on launcher, required before firing protocol -->
             <div class="form-group" id="username-group" style="display: none;">
                 <label for="input-username">Roblox username</label>
                 <input type="text" id="input-username" placeholder="YourRobloxUsername" autocomplete="off" spellcheck="false">
-                <p class="hint">This game is invite-only. Enter the exact username you were invited with.</p>
+                <p class="hint" id="username-hint">Enter your Roblox username to launch the experience.</p>
             </div>
-
             <div class="launch-error" id="launch-error"></div>
-
             <button id="launch-btn" class="button disabled">Join Experience</button>
-
             <div class="fallback-link" id="fallback-link">
                 Nothing happened? <a id="web-fallback" href="#" target="_blank" rel="noopener">Open on the Roblox website</a> and press Play there.
             </div>
-
             <div class="credits-footer">Credits to ducky</div>
         </div>
-
-
         <!-- 2. ADMIN DASHBOARD VIEW (OTX HUB) -->
         <div id="admin-view" class="card" style="display: none;">
             <div class="logo-container">
@@ -342,57 +295,44 @@
                 <h1>Otx Hub</h1>
                 <p class="description">Generate and manage configured game launch links.</p>
             </div>
-
             <div class="form-group">
                 <label for="input-place">Place ID or game URL</label>
                 <input type="text" id="input-place" placeholder="1818  —  or paste the full game link">
                 <p class="hint">Paste a full roblox.com/games/... link and the ID is pulled out for you.</p>
             </div>
-
             <div class="form-group">
                 <label for="input-code">Private server link code (optional)</label>
                 <input type="text" id="input-code" placeholder="32-character code, or paste the server link">
                 <p class="hint">This is the value after <code>privateServerLinkCode=</code> in the server's URL.</p>
             </div>
-
             <div class="form-group">
                 <label for="input-allow">Invite list — allowed usernames (optional)</label>
                 <input type="text" id="input-allow" placeholder="e.g. Builderman, Ducky123, MyFriend">
                 <p class="hint">Comma-separated. If set, the launcher will only fire for these usernames. <strong>This is a soft gate</strong> — see the note below the link for real enforcement.</p>
             </div>
-
             <button onclick="generateLink()" class="button" style="margin-top: 10px;">Generate launch link</button>
-
             <div class="notice" id="admin-notice"></div>
-
             <div class="output-box" id="output-box">
                 <label>Your generated link</label>
                 <div class="output-url" id="output-url"></div>
                 <button onclick="copyToClipboard()" class="button secondary" style="padding: 10px; font-size: 13px;">Copy link</button>
                 <p class="hint" style="margin-top: 12px;">The invite list is only a check inside this page — anyone who knows the Place ID can still join through Roblox directly. To actually stop uninvited players from loading in, add the kick script (given to you separately) inside the game.</p>
             </div>
-
             <div class="divider"></div>
-
             <div class="logo-container" style="margin-bottom: 15px;">
                 <h3>Link management</h3>
                 <p class="description" style="font-size: 12px; margin-bottom: 10px;">Revoke generated links on this browser only.</p>
             </div>
-
             <div class="form-group">
                 <label for="input-revoke-id">Place ID to revoke or restore</label>
                 <input type="text" id="input-revoke-id" placeholder="e.g. 1818">
             </div>
-
             <div style="display: flex; gap: 10px; margin-top: 10px;">
                 <button onclick="manageRevocation(true)" class="button danger" style="padding: 12px; font-size: 14px;">Revoke link</button>
                 <button onclick="manageRevocation(false)" class="button secondary" style="padding: 12px; font-size: 14px;">Restore link</button>
             </div>
-
             <div class="credits-footer">Credits to ducky</div>
         </div>
-
-
         <!-- 3. REVOKED LINK VIEW -->
         <div id="revoked-view" class="card" style="display: none;">
             <div class="logo-container">
@@ -404,16 +344,12 @@
                 <h1>Link invalid</h1>
                 <p class="description">This launch URL has been deactivated.</p>
             </div>
-
             <div class="error-message" style="text-align: center;">
                 <strong>The admin revoked this link.</strong><br>
                 Ask them for a new invite.
             </div>
-
             <div class="credits-footer">Credits to ducky</div>
         </div>
-
-
         <!-- 4. SETUP REQUIRED VIEW -->
         <div id="error-view" class="card" style="display: none;">
             <div class="logo-container">
@@ -425,23 +361,17 @@
                 <h1>Setup required</h1>
                 <p class="description">This page has no target game yet.</p>
             </div>
-
             <div class="error-message">
                 <strong>No active experience.</strong><br>
                 Load this page with a generated link, or open the admin dashboard to make one.
             </div>
-
             <div class="credits-footer">Credits to ducky</div>
         </div>
-
     </div>
-
     <script>
         // --- 1. CONFIGURATION ---
         const ADMIN_SECRET_KEY = "admin123";
-
         // --- 2. HELPERS ---
-
         // Pull a place ID out of raw input or a full Roblox URL.
         function parsePlaceId(raw) {
             raw = (raw || "").trim();
@@ -451,33 +381,25 @@
             const digits = raw.match(/^(\d+)$/);
             return digits ? digits[1] : "";
         }
-
         // Work out what kind of code the user pasted.
         // Returns { code, kind } where kind is 'link', 'legacy', 'share' or 'unknown'.
         function parseServerCode(raw) {
             raw = (raw || "").trim();
             if (!raw) return null;
-
             const fromUrl = raw.match(/privateServerLinkCode=([A-Za-z0-9_-]+)/i);
             if (fromUrl) return { code: fromUrl[1], kind: "link" };
-
             const shareUrl = raw.match(/roblox\.com\/share\?[^\s]*code=([A-Za-z0-9_-]+)/i);
             if (shareUrl) return { code: shareUrl[1], kind: "share" };
-
             // Legacy VIP server GUID (8-4-4-4-12)
             if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(raw)) {
                 return { code: raw, kind: "legacy" };
             }
-
             // Standard private server link code: 32 hex characters
             if (/^[0-9a-f]{32}$/i.test(raw)) return { code: raw, kind: "link" };
-
             // A long run of digits is a share-link ID, not a usable code
             if (/^\d{12,}$/.test(raw)) return { code: raw, kind: "share-id" };
-
             return { code: raw, kind: "unknown" };
         }
-
         // Turn a comma/newline separated string into a clean, lowercased list of usernames.
         function parseAllowList(raw) {
             return (raw || "")
@@ -485,7 +407,6 @@
                 .map(s => s.trim().toLowerCase())
                 .filter(Boolean);
         }
-
         // --- 3. URL PROCESSING ---
         const urlParams = new URLSearchParams(window.location.search);
         const encodedId = urlParams.get('id');
@@ -496,7 +417,6 @@
             || "";
         const codeKind = urlParams.get('codeKind') || "";
         const key = urlParams.get('key');
-
         // Decode the invite list (base64 of a comma-separated username list), if present.
         let allowList = [];
         const encodedAllow = urlParams.get('allow');
@@ -510,12 +430,10 @@
                 allowList = [];
             }
         }
-
         const launcherView = document.getElementById('launcher-view');
         const adminView = document.getElementById('admin-view');
         const revokedView = document.getElementById('revoked-view');
         const errorView = document.getElementById('error-view');
-
         let placeId = "";
         try {
             if (encodedId) placeId = atob(encodedId).trim();
@@ -523,26 +441,29 @@
             placeId = "";
         }
         if (!/^\d+$/.test(placeId)) placeId = "";
-
         const isCurrentPlaceRevoked = placeId ? localStorage.getItem(`revoked_${placeId}`) : null;
-
         if (isCurrentPlaceRevoked === "true") {
             revokedView.style.display = 'block';
         } else if (key === ADMIN_SECRET_KEY) {
             adminView.style.display = 'block';
         } else if (placeId) {
             launcherView.style.display = 'block';
-
             const launcherInfo = document.getElementById('launcher-info');
             if (rawCode) {
                 const shortCode = rawCode.length > 10 ? `${rawCode.substring(0, 10)}…` : rawCode;
                 launcherInfo.innerHTML =
                     `<div class="info-badge">Server code: <span class="accent">${shortCode}</span></div>`;
             }
-
-            // Always ask for a username before launching (invite-gated or not).
-            document.getElementById('username-group').style.display = 'block';
-
+            // Always ask for a username before launching
+            const usernameGroup = document.getElementById('username-group');
+            const usernameHint = document.getElementById('username-hint');
+            usernameGroup.style.display = 'block';
+            
+            if (allowList.length > 0) {
+                usernameHint.innerHTML = "This experience is invite-only. Enter the exact username you were invited with.";
+            } else {
+                usernameHint.innerHTML = "Enter your Roblox username to launch the experience.";
+            }
             // Build the website fallback now so it's ready if the app doesn't open
             const fallback = document.getElementById('web-fallback');
             let webUrl = `https://www.roblox.com/games/${placeId}`;
@@ -550,23 +471,30 @@
                 webUrl += `?privateServerLinkCode=${encodeURIComponent(rawCode)}`;
             }
             fallback.href = webUrl;
-
+            // Monitor username input events to update Join button state
+            const usernameInput = document.getElementById('input-username');
+            usernameInput.addEventListener('input', updateLaunchButtonState);
             initHumanVerification();
         } else {
             errorView.style.display = 'block';
         }
-
         // --- 4. HUMAN INTERACTION VERIFICATION ---
         let verifiedHuman = false;
-
+        function updateLaunchButtonState() {
+            const launchBtn = document.getElementById('launch-btn');
+            const usernameInput = document.getElementById('input-username');
+            const typed = (usernameInput.value || "").trim();
+            if (verifiedHuman && typed.length > 0) {
+                launchBtn.classList.remove('disabled');
+            } else {
+                launchBtn.classList.add('disabled');
+            }
+        }
         function initHumanVerification() {
             const statusBox = document.getElementById('verification-status');
-            const launchBtn = document.getElementById('launch-btn');
-
             function handleVerification() {
                 if (verifiedHuman) return;
                 verifiedHuman = true;
-
                 statusBox.style.background = "rgba(0, 230, 118, 0.08)";
                 statusBox.style.borderColor = "rgba(0, 230, 118, 0.2)";
                 statusBox.style.color = "#00e676";
@@ -576,33 +504,27 @@
                     </svg>
                     <span>Verified browser connection</span>
                 `;
-
-                launchBtn.classList.remove('disabled');
+                // Update the state of the launch button now that human verification is complete
+                updateLaunchButtonState();
+                // Add button handler
+                const launchBtn = document.getElementById('launch-btn');
                 launchBtn.addEventListener('click', triggerAppLaunch);
-
                 window.removeEventListener('mousemove', handleVerification);
                 window.removeEventListener('touchstart', handleVerification);
                 window.removeEventListener('keydown', handleVerification);
             }
-
             window.addEventListener('mousemove', handleVerification);
             window.addEventListener('touchstart', handleVerification);
             window.addEventListener('keydown', handleVerification);
         }
-
         function showLaunchError(msg) {
             const box = document.getElementById('launch-error');
             if (!msg) { box.style.display = 'none'; box.textContent = ''; return; }
             box.textContent = msg;
             box.style.display = 'block';
         }
-
         function triggerAppLaunch() {
             if (!verifiedHuman || !placeId) return;
-
-            // Require a username before we fire anything. This is a gate/pause on THIS PAGE
-            // only — it cannot stop someone joining the game through Roblox directly. Real
-            // enforcement lives inside the game (see the PlayerAdded kick script).
             const typed = (document.getElementById('input-username').value || "").trim();
             if (!typed) {
                 showLaunchError("Enter your Roblox username to continue.");
@@ -613,9 +535,7 @@
                 showLaunchError("That username isn't on the invite list for this game. Ask the admin to add you.");
                 return;
             }
-
             showLaunchError(null);
-
             // Cosmetic "verifying your account" beat, then open the protocol.
             runVerifySequence(typed, function () {
                 // Private servers use linkCode; accessCode is only for legacy VIP-server GUIDs.
@@ -624,30 +544,24 @@
                     const param = (codeKind === 'legacy') ? 'accessCode' : 'linkCode';
                     launchUrl += `&${param}=${encodeURIComponent(rawCode)}`;
                 }
-
                 window.location.href = launchUrl;
-
                 // If the protocol handler never fires, offer the website route
                 setTimeout(() => {
                     document.getElementById('fallback-link').style.display = 'block';
                 }, 2500);
             });
         }
-
         // Short visual "verifying username" sequence before the app opens.
         function runVerifySequence(username, onDone) {
             const statusBox = document.getElementById('verification-status');
             const launchBtn = document.getElementById('launch-btn');
             const usernameInput = document.getElementById('input-username');
-
             launchBtn.classList.add('disabled');
             usernameInput.disabled = true;
-
             statusBox.style.background = "rgba(255, 193, 7, 0.08)";
             statusBox.style.borderColor = "rgba(255, 193, 7, 0.2)";
             statusBox.style.color = "#ffc107";
             statusBox.innerHTML = `<span>Verifying @${username}…</span>`;
-
             setTimeout(() => {
                 statusBox.style.background = "rgba(0, 230, 118, 0.08)";
                 statusBox.style.borderColor = "rgba(0, 230, 118, 0.2)";
@@ -662,7 +576,6 @@
                 setTimeout(onDone, 600);
             }, 900);
         }
-
         // --- 5. ADMIN PANEL FUNCTIONS ---
         function showNotice(html) {
             const box = document.getElementById('admin-notice');
@@ -670,36 +583,29 @@
             box.innerHTML = html;
             box.style.display = 'block';
         }
-
         function generateLink() {
             const placeId = parsePlaceId(document.getElementById('input-place').value);
             const parsed = parseServerCode(document.getElementById('input-code').value);
             const allowUsers = parseAllowList(document.getElementById('input-allow').value);
             const outputBox = document.getElementById('output-box');
             const outputUrl = document.getElementById('output-url');
-
             showNotice(null);
             outputBox.style.display = 'none';
-
             if (!placeId) {
                 showNotice("<strong>Place ID missing.</strong> Enter the number from the game's address, like the 1818 in roblox.com/games/1818/Name — or paste the whole link and it'll be read for you.");
                 return;
             }
-
             if (parsed && parsed.kind === 'share-id') {
                 showNotice("<strong>That's a share-link ID, not a server code.</strong> A private server code is 32 characters of letters and numbers. Open the share link while signed in, wait for it to redirect, then copy the value after <code>privateServerLinkCode=</code> in the address bar.");
                 return;
             }
-
             if (parsed && parsed.kind === 'share') {
                 showNotice("<strong>That share link needs resolving first.</strong> Open it in a signed-in browser, let it redirect to the game page, then copy the value after <code>privateServerLinkCode=</code> and paste that here instead.");
                 return;
             }
-
             const base64Id = btoa(placeId);
             const baseUrl = window.location.origin + window.location.pathname;
             let generatedUrl = `${baseUrl}?id=${base64Id}`;
-
             if (parsed) {
                 generatedUrl += `&linkCode=${encodeURIComponent(parsed.code)}`;
                 if (parsed.kind === 'legacy') generatedUrl += `&codeKind=legacy`;
@@ -707,16 +613,13 @@
                     showNotice("Heads up: that code isn't the usual 32-character format, so it may not work. The link was still generated.");
                 }
             }
-
             // Attach the invite list, if the admin set one.
             if (allowUsers.length) {
                 generatedUrl += `&allow=${encodeURIComponent(btoa(allowUsers.join(',')))}`;
             }
-
             outputUrl.innerText = generatedUrl;
             outputBox.style.display = 'block';
         }
-
         function copyToClipboard() {
             const urlText = document.getElementById('output-url').innerText;
             navigator.clipboard.writeText(urlText).then(() => {
@@ -725,15 +628,24 @@
                 showNotice("Couldn't copy automatically — select the link above and copy it manually.");
             });
         }
-
+        // Allow pressing enter key in the username box to trigger the launcher directly
+        const usernameInput = document.getElementById('input-username');
+        if (usernameInput) {
+            usernameInput.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    const launchBtn = document.getElementById('launch-btn');
+                    if (!launchBtn.classList.contains('disabled')) {
+                        triggerAppLaunch();
+                    }
+                }
+            });
+        }
         function manageRevocation(shouldRevoke) {
             const targetId = parsePlaceId(document.getElementById('input-revoke-id').value);
-
             if (!targetId) {
                 showNotice("Enter a numeric Place ID to revoke or restore.");
                 return;
             }
-
             if (shouldRevoke) {
                 localStorage.setItem(`revoked_${targetId}`, "true");
                 showNotice(`Place ID ${targetId} is revoked on this browser.`);
