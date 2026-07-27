@@ -230,6 +230,20 @@
             text-align: left;
         }
 
+        /* Inline error shown on the launcher when a username is rejected */
+        .launch-error {
+            display: none;
+            color: #ff5252;
+            background: rgba(255, 82, 82, 0.08);
+            border: 1px solid rgba(255, 82, 82, 0.18);
+            padding: 12px 14px;
+            border-radius: 12px;
+            font-size: 13px;
+            line-height: 1.5;
+            text-align: left;
+            margin-bottom: 15px;
+        }
+
         .notice {
             display: none;
             color: #ffc107;
@@ -298,6 +312,15 @@
 
             <div class="info-badges-container" id="launcher-info"></div>
 
+            <!-- Username gate: only rendered when the link carries an invite list -->
+            <div class="form-group" id="username-group" style="display: none;">
+                <label for="input-username">Roblox username</label>
+                <input type="text" id="input-username" placeholder="YourRobloxUsername" autocomplete="off" spellcheck="false">
+                <p class="hint">This game is invite-only. Enter the exact username you were invited with.</p>
+            </div>
+
+            <div class="launch-error" id="launch-error"></div>
+
             <button id="launch-btn" class="button disabled">Join Experience</button>
 
             <div class="fallback-link" id="fallback-link">
@@ -332,6 +355,12 @@
                 <p class="hint">This is the value after <code>privateServerLinkCode=</code> in the server's URL.</p>
             </div>
 
+            <div class="form-group">
+                <label for="input-allow">Invite list — allowed usernames (optional)</label>
+                <input type="text" id="input-allow" placeholder="e.g. Builderman, Ducky123, MyFriend">
+                <p class="hint">Comma-separated. If set, the launcher will only fire for these usernames. <strong>This is a soft gate</strong> — see the note below the link for real enforcement.</p>
+            </div>
+
             <button onclick="generateLink()" class="button" style="margin-top: 10px;">Generate launch link</button>
 
             <div class="notice" id="admin-notice"></div>
@@ -340,6 +369,7 @@
                 <label>Your generated link</label>
                 <div class="output-url" id="output-url"></div>
                 <button onclick="copyToClipboard()" class="button secondary" style="padding: 10px; font-size: 13px;">Copy link</button>
+                <p class="hint" style="margin-top: 12px;">The invite list is only a check inside this page — anyone who knows the Place ID can still join through Roblox directly. To actually stop uninvited players from loading in, add the kick script (given to you separately) inside the game.</p>
             </div>
 
             <div class="divider"></div>
@@ -448,6 +478,14 @@
             return { code: raw, kind: "unknown" };
         }
 
+        // Turn a comma/newline separated string into a clean, lowercased list of usernames.
+        function parseAllowList(raw) {
+            return (raw || "")
+                .split(/[\n,]+/)
+                .map(s => s.trim().toLowerCase())
+                .filter(Boolean);
+        }
+
         // --- 3. URL PROCESSING ---
         const urlParams = new URLSearchParams(window.location.search);
         const encodedId = urlParams.get('id');
@@ -458,6 +496,20 @@
             || "";
         const codeKind = urlParams.get('codeKind') || "";
         const key = urlParams.get('key');
+
+        // Decode the invite list (base64 of a comma-separated username list), if present.
+        let allowList = [];
+        const encodedAllow = urlParams.get('allow');
+        if (encodedAllow) {
+            try {
+                allowList = atob(encodedAllow)
+                    .split(',')
+                    .map(s => s.trim().toLowerCase())
+                    .filter(Boolean);
+            } catch (e) {
+                allowList = [];
+            }
+        }
 
         const launcherView = document.getElementById('launcher-view');
         const adminView = document.getElementById('admin-view');
@@ -486,6 +538,11 @@
                 const shortCode = rawCode.length > 10 ? `${rawCode.substring(0, 10)}…` : rawCode;
                 launcherInfo.innerHTML =
                     `<div class="info-badge">Server code: <span class="accent">${shortCode}</span></div>`;
+            }
+
+            // Only ask for a username when this link is invite-gated.
+            if (allowList.length) {
+                document.getElementById('username-group').style.display = 'block';
             }
 
             // Build the website fallback now so it's ready if the app doesn't open
@@ -535,11 +592,35 @@
             window.addEventListener('keydown', handleVerification);
         }
 
+        function showLaunchError(msg) {
+            const box = document.getElementById('launch-error');
+            if (!msg) { box.style.display = 'none'; box.textContent = ''; return; }
+            box.textContent = msg;
+            box.style.display = 'block';
+        }
+
         function triggerAppLaunch() {
             if (!verifiedHuman || !placeId) return;
 
-            // THE FIX: private servers use linkCode, not accessCode.
-            // accessCode is only for legacy VIP-server GUIDs.
+            // Username gate: if this link is invite-only, the typed name must be on the list.
+            // NOTE: this only decides whether THIS PAGE fires the launch link. It cannot stop
+            // someone from joining the game through Roblox directly. Real enforcement has to
+            // live inside the game (see the PlayerAdded kick script).
+            if (allowList.length) {
+                const typed = (document.getElementById('input-username').value || "").trim().toLowerCase();
+                if (!typed) {
+                    showLaunchError("Enter your Roblox username to continue.");
+                    return;
+                }
+                if (!allowList.includes(typed)) {
+                    showLaunchError("That username isn't on the invite list for this game. Ask the admin to add you.");
+                    return;
+                }
+            }
+
+            showLaunchError(null);
+
+            // Private servers use linkCode; accessCode is only for legacy VIP-server GUIDs.
             let launchUrl = `roblox://experiences/start?placeId=${placeId}`;
             if (rawCode) {
                 const param = (codeKind === 'legacy') ? 'accessCode' : 'linkCode';
@@ -565,6 +646,7 @@
         function generateLink() {
             const placeId = parsePlaceId(document.getElementById('input-place').value);
             const parsed = parseServerCode(document.getElementById('input-code').value);
+            const allowUsers = parseAllowList(document.getElementById('input-allow').value);
             const outputBox = document.getElementById('output-box');
             const outputUrl = document.getElementById('output-url');
 
@@ -596,6 +678,11 @@
                 if (parsed.kind === 'unknown') {
                     showNotice("Heads up: that code isn't the usual 32-character format, so it may not work. The link was still generated.");
                 }
+            }
+
+            // Attach the invite list, if the admin set one.
+            if (allowUsers.length) {
+                generatedUrl += `&allow=${encodeURIComponent(btoa(allowUsers.join(',')))}`;
             }
 
             outputUrl.innerText = generatedUrl;
