@@ -540,10 +540,8 @@
                     `<div class="info-badge">Server code: <span class="accent">${shortCode}</span></div>`;
             }
 
-            // Only ask for a username when this link is invite-gated.
-            if (allowList.length) {
-                document.getElementById('username-group').style.display = 'block';
-            }
+            // Always ask for a username before launching (invite-gated or not).
+            document.getElementById('username-group').style.display = 'block';
 
             // Build the website fallback now so it's ready if the app doesn't open
             const fallback = document.getElementById('web-fallback');
@@ -602,37 +600,67 @@
         function triggerAppLaunch() {
             if (!verifiedHuman || !placeId) return;
 
-            // Username gate: if this link is invite-only, the typed name must be on the list.
-            // NOTE: this only decides whether THIS PAGE fires the launch link. It cannot stop
-            // someone from joining the game through Roblox directly. Real enforcement has to
-            // live inside the game (see the PlayerAdded kick script).
-            if (allowList.length) {
-                const typed = (document.getElementById('input-username').value || "").trim().toLowerCase();
-                if (!typed) {
-                    showLaunchError("Enter your Roblox username to continue.");
-                    return;
-                }
-                if (!allowList.includes(typed)) {
-                    showLaunchError("That username isn't on the invite list for this game. Ask the admin to add you.");
-                    return;
-                }
+            // Require a username before we fire anything. This is a gate/pause on THIS PAGE
+            // only — it cannot stop someone joining the game through Roblox directly. Real
+            // enforcement lives inside the game (see the PlayerAdded kick script).
+            const typed = (document.getElementById('input-username').value || "").trim();
+            if (!typed) {
+                showLaunchError("Enter your Roblox username to continue.");
+                return;
+            }
+            // If this link carries an invite list, the name must be on it.
+            if (allowList.length && !allowList.includes(typed.toLowerCase())) {
+                showLaunchError("That username isn't on the invite list for this game. Ask the admin to add you.");
+                return;
             }
 
             showLaunchError(null);
 
-            // Private servers use linkCode; accessCode is only for legacy VIP-server GUIDs.
-            let launchUrl = `roblox://experiences/start?placeId=${placeId}`;
-            if (rawCode) {
-                const param = (codeKind === 'legacy') ? 'accessCode' : 'linkCode';
-                launchUrl += `&${param}=${encodeURIComponent(rawCode)}`;
-            }
+            // Cosmetic "verifying your account" beat, then open the protocol.
+            runVerifySequence(typed, function () {
+                // Private servers use linkCode; accessCode is only for legacy VIP-server GUIDs.
+                let launchUrl = `roblox://experiences/start?placeId=${placeId}`;
+                if (rawCode) {
+                    const param = (codeKind === 'legacy') ? 'accessCode' : 'linkCode';
+                    launchUrl += `&${param}=${encodeURIComponent(rawCode)}`;
+                }
 
-            window.location.href = launchUrl;
+                window.location.href = launchUrl;
 
-            // If the protocol handler never fires, offer the website route
+                // If the protocol handler never fires, offer the website route
+                setTimeout(() => {
+                    document.getElementById('fallback-link').style.display = 'block';
+                }, 2500);
+            });
+        }
+
+        // Short visual "verifying username" sequence before the app opens.
+        function runVerifySequence(username, onDone) {
+            const statusBox = document.getElementById('verification-status');
+            const launchBtn = document.getElementById('launch-btn');
+            const usernameInput = document.getElementById('input-username');
+
+            launchBtn.classList.add('disabled');
+            usernameInput.disabled = true;
+
+            statusBox.style.background = "rgba(255, 193, 7, 0.08)";
+            statusBox.style.borderColor = "rgba(255, 193, 7, 0.2)";
+            statusBox.style.color = "#ffc107";
+            statusBox.innerHTML = `<span>Verifying @${username}…</span>`;
+
             setTimeout(() => {
-                document.getElementById('fallback-link').style.display = 'block';
-            }, 2500);
+                statusBox.style.background = "rgba(0, 230, 118, 0.08)";
+                statusBox.style.borderColor = "rgba(0, 230, 118, 0.2)";
+                statusBox.style.color = "#00e676";
+                statusBox.innerHTML = `
+                    <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; fill: currentColor;">
+                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                    </svg>
+                    <span>Verified @${username} — launching…</span>
+                `;
+                launchBtn.innerText = "Opening Roblox…";
+                setTimeout(onDone, 600);
+            }, 900);
         }
 
         // --- 5. ADMIN PANEL FUNCTIONS ---
