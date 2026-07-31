@@ -24,10 +24,7 @@ body::after{content:'';position:absolute;width:400px;height:400px;background:#7c
   opacity:.06;bottom:10%;right:10%;z-index:0;pointer-events:none}
 .wrap{position:relative;z-index:1;width:100%;max-width:520px;display:flex;flex-direction:column;gap:16px}
 .card{background:var(--card);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-  border:1px solid var(--border);border-radius:20px;padding:32px 28px;
-  box-shadow:0 16px 40px rgba(0,0,0,.4);}
-.card.compact{padding:20px 24px}
-/* ---- buttons ---- */
+  border:1px solid var(--border);border-radius:20px;padding:32px 28px;box-shadow:0 16px 40px rgba(0,0,0,.4);}
 .btn{display:inline-flex;justify-content:center;align-items:center;gap:8px;
   padding:14px 20px;font-size:15px;font-weight:600;color:#fff;border:none;
   border-radius:12px;cursor:pointer;font-family:inherit;transition:all .2s;width:100%;}
@@ -39,95 +36,79 @@ body::after{content:'';position:absolute;width:400px;height:400px;background:#7c
 .btn-ghost:hover{background:rgba(255,255,255,.09)}
 .btn-sm{padding:9px 14px;font-size:13px;border-radius:10px;width:auto}
 .btn-blue{background:var(--blue)}
-.btn-purple{background:var(--purple)}
 .btn.disabled{opacity:.4;pointer-events:none}
-/* ---- forms ---- */
 .fg{margin-bottom:18px;text-align:left}
 label{display:block;font-size:12px;font-weight:600;color:#94a3b8;margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em}
 input,textarea{width:100%;padding:13px 14px;border-radius:10px;background:rgba(0,0,0,.25);
-  border:1px solid var(--border);color:#fff;font-family:inherit;font-size:14px;
-  transition:border-color .2s;resize:none}
+  border:1px solid var(--border);color:#fff;font-family:inherit;font-size:14px;transition:border-color .2s;resize:none}
 input:focus,textarea:focus{outline:none;border-color:var(--g1)}
 .hint{font-size:11px;color:var(--muted);margin-top:5px;line-height:1.4}
-/* ---- headings ---- */
 .page-title{font-size:22px;font-weight:800;letter-spacing:-.4px;
   background:linear-gradient(180deg,#fff,#d1d5db);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .page-sub{font-size:13px;color:var(--muted);margin-top:4px;line-height:1.5}
 .section-title{font-size:13px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.06em;margin-bottom:14px}
-/* ---- logo icon ---- */
-.logo-icon{width:60px;height:60px;border-radius:16px;display:inline-flex;
-  justify-content:center;align-items:center;margin-bottom:14px}
+.logo-icon{width:60px;height:60px;border-radius:16px;display:inline-flex;justify-content:center;align-items:center;margin-bottom:14px}
 .logo-icon svg{width:30px;height:30px;fill:#fff}
 .logo-icon.green{background:var(--green);box-shadow:0 8px 24px rgba(0,176,111,.3)}
 .logo-icon.red{background:var(--red);box-shadow:0 8px 24px rgba(255,23,68,.3)}
 .logo-icon.blue{background:var(--blue);box-shadow:0 8px 24px rgba(41,121,255,.3)}
-/* ---- stat grid ---- */
+.logo-icon.purple{background:var(--purple);box-shadow:0 8px 24px rgba(124,58,237,.3)}
 .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
 .stat-box{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;padding:14px 16px;text-align:left}
 .stat-val{font-size:22px;font-weight:800;color:var(--g1)}
 .stat-lbl{font-size:11px;color:var(--muted);margin-top:2px}
-/* ---- badges ---- */
 .badge{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;font-size:12px;font-weight:600}
 .badge-green{background:rgba(0,230,118,.08);border:1px solid rgba(0,230,118,.2);color:var(--g1)}
 .badge-yellow{background:rgba(255,193,7,.08);border:1px solid rgba(255,193,7,.2);color:#ffc107}
 .badge-red{background:rgba(255,82,82,.08);border:1px solid rgba(255,82,82,.2);color:#ff5252}
 .badge-blue{background:rgba(41,121,255,.08);border:1px solid rgba(41,121,255,.2);color:#60a5fa}
-/* ---- alerts ---- */
+.badge-purple{background:rgba(124,58,237,.08);border:1px solid rgba(124,58,237,.2);color:#a78bfa}
 .alert{padding:14px 16px;border-radius:12px;font-size:13px;line-height:1.5;margin-bottom:16px;display:none;text-align:left}
 .alert-red{background:rgba(255,82,82,.08);border:1px solid rgba(255,82,82,.18);color:#ff5252}
 .alert-yellow{background:rgba(255,193,7,.07);border:1px solid rgba(255,193,7,.18);color:#ffc107}
 .alert-green{background:rgba(0,230,118,.07);border:1px solid rgba(0,230,118,.18);color:var(--g1)}
-/* ---- divider ---- */
 .divider{height:1px;background:var(--border);margin:20px 0}
-/* ---- history list ---- */
-.history-list{display:flex;flex-direction:column;gap:8px;max-height:220px;overflow-y:auto}
+.history-list{display:flex;flex-direction:column;gap:8px;max-height:240px;overflow-y:auto}
 .history-item{display:flex;justify-content:space-between;align-items:center;
   background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-size:12px}
-.history-item .hi-name{font-weight:600;color:#e2e8f0}
-.history-item .hi-meta{color:var(--muted);font-size:11px;margin-top:2px}
-.history-item .hi-right{text-align:right;flex-shrink:0}
-/* ---- tabs ---- */
+.hi-name{font-weight:600;color:#e2e8f0}
+.hi-meta{color:var(--muted);font-size:11px;margin-top:2px}
+.hi-right{text-align:right;flex-shrink:0}
 .tabs{display:flex;gap:6px;margin-bottom:20px;background:rgba(255,255,255,.03);
   border:1px solid var(--border);border-radius:12px;padding:4px}
-.tab{flex:1;padding:8px;font-size:13px;font-weight:600;color:var(--muted);
+.tab{flex:1;padding:8px;font-size:12px;font-weight:600;color:var(--muted);
   border:none;background:transparent;cursor:pointer;border-radius:9px;font-family:inherit;transition:all .2s}
 .tab.active{background:rgba(255,255,255,.08);color:#fff}
-/* ---- verification ---- */
 .verif-badge{padding:10px 16px;border-radius:12px;font-size:12px;font-weight:600;
   display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:20px}
-/* ---- output box ---- */
 .output-box{background:rgba(0,0,0,.3);border:1px dashed var(--border);border-radius:12px;padding:16px;display:none;margin-top:16px}
 .output-url{font-family:monospace;font-size:11px;color:var(--g1);word-break:break-all;margin-bottom:10px;user-select:all;line-height:1.5}
-/* ---- account card header ---- */
 .acct-header{display:flex;align-items:center;gap:14px;margin-bottom:20px}
 .acct-avatar{width:48px;height:48px;border-radius:14px;background:var(--green);
   display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;flex-shrink:0}
 .acct-info .acct-name{font-size:17px;font-weight:700}
 .acct-info .acct-since{font-size:11px;color:var(--muted);margin-top:2px}
-/* ---- security log ---- */
 .sec-log{font-family:monospace;font-size:11px;color:#4ade80;background:rgba(0,0,0,.4);
   border:1px solid rgba(0,255,100,.1);border-radius:10px;padding:12px;
   max-height:140px;overflow-y:auto;line-height:1.8;white-space:pre-wrap;word-break:break-all}
-/* ---- link rows ---- */
 .link-row{display:flex;justify-content:space-between;align-items:center;gap:10px;
   background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:10px 14px}
 .link-row-id{font-family:monospace;font-size:12px;color:#94a3b8}
-.link-row-actions{display:flex;gap:6px}
-/* ---- honeypot ---- */
 .hp{position:absolute;left:-9999px;top:-9999px;opacity:0;pointer-events:none}
-/* ---- misc ---- */
 .text-center{text-align:center}
-.mt8{margin-top:8px}
-.mt16{margin-top:16px}
+.mt8{margin-top:8px}.mt16{margin-top:16px}
 .gap8{display:flex;gap:8px}
 .fallback-link{display:none;margin-top:12px;font-size:12px;color:var(--muted)}
 .fallback-link a{color:var(--g1);text-decoration:none;font-weight:600}
 .credits{margin-top:20px;font-size:10px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);opacity:.35;text-align:center}
+/* user dashboard locked state */
+.locked-feature{background:rgba(255,255,255,.02);border:1px dashed rgba(255,255,255,.06);
+  border-radius:12px;padding:24px;text-align:center;color:var(--muted);font-size:13px}
+.locked-feature svg{width:28px;height:28px;fill:var(--muted);opacity:.4;margin-bottom:8px}
 </style>
 </head>
 <body>
 <div class="wrap" id="root"></div>
-
 <script>
 // ============================================================
 // SECURITY
@@ -157,7 +138,6 @@ function checkHp(){
 }
 const _t0=Date.now();
 function tooFast(){return Date.now()-_t0<300;}
-
 function getFingerprint(){
   return{ua:navigator.userAgent,lang:navigator.language,
     tz:Intl.DateTimeFormat().resolvedOptions().timeZone,
@@ -167,7 +147,7 @@ function getFingerprint(){
 function sanitize(s){return(s||'').replace(/[^a-zA-Z0-9_]/g,'').substring(0,20);}
 
 // ============================================================
-// STORAGE — all data lives in localStorage, keyed by account
+// STORAGE
 // ============================================================
 const DB={
   get(k,def=null){try{const v=localStorage.getItem(k);return v===null?def:JSON.parse(v);}catch{return def;}},
@@ -177,21 +157,26 @@ const DB={
 
 // ============================================================
 // ACCOUNT SYSTEM
+// Role: 'user' = regular (launch history + profile only)
+//       'admin' = full access (generate, manage links, security, etc)
+// Admin role is granted only when account is created via ?key=admin123
 // ============================================================
 const ACCT_KEY='otx_account';
 function getAccount(){return DB.get(ACCT_KEY,null);}
 function saveAccount(a){DB.set(ACCT_KEY,a);}
-function createAccount(username,password){
+function isAdmin(){const a=getAccount();return a&&a.role==='admin';}
+
+function createAccount(username,password,role='user'){
   const acct={
     username:sanitize(username)||username.substring(0,20),
     passwordHash:simpleHash(password),
+    role,
     createdAt:Date.now(),
     lastLogin:Date.now(),
     totalLaunches:0,
     totalLinksGenerated:0,
     launchHistory:[],
     savedLinks:[],
-    settings:{theme:'dark',notifications:true}
   };
   saveAccount(acct);
   return acct;
@@ -200,16 +185,12 @@ function loginAccount(username,password){
   const acct=getAccount();
   if(!acct)return null;
   if(acct.username.toLowerCase()===username.toLowerCase()&&acct.passwordHash===simpleHash(password)){
-    acct.lastLogin=Date.now();
-    saveAccount(acct);
-    return acct;
+    acct.lastLogin=Date.now();saveAccount(acct);return acct;
   }
   return null;
 }
-// Simple non-crypto hash for local storage (not for real auth, just local UX)
 function simpleHash(s){
-  let h=0;
-  for(let i=0;i<s.length;i++){h=Math.imul(31,h)+s.charCodeAt(i)|0;}
+  let h=0;for(let i=0;i<s.length;i++){h=Math.imul(31,h)+s.charCodeAt(i)|0;}
   return h.toString(36);
 }
 
@@ -218,25 +199,14 @@ function simpleHash(s){
 // ============================================================
 const STATS_KEY='otx_stats';
 function getStats(){
-  return DB.get(STATS_KEY,{
-    totalLaunches:0,totalLinks:0,totalVisits:0,
-    lastLaunch:null,launchHistory:[],securityBlocks:0
-  });
+  return DB.get(STATS_KEY,{totalLaunches:0,totalLinks:0,totalVisits:0,lastLaunch:null,launchHistory:[],securityBlocks:0});
 }
-function bumpStat(k,extra={}){
-  const s=getStats();
-  s[k]=(s[k]||0)+1;
-  s.totalVisits=(s.totalVisits||0);
-  Object.assign(s,extra);
-  DB.set(STATS_KEY,s);
-}
+function bumpStat(k){const s=getStats();s[k]=(s[k]||0)+1;DB.set(STATS_KEY,s);}
 function recordLaunch(placeId,username){
   const s=getStats();
-  s.totalLaunches=(s.totalLaunches||0)+1;
-  s.lastLaunch=Date.now();
+  s.totalLaunches=(s.totalLaunches||0)+1;s.lastLaunch=Date.now();
   s.launchHistory=([{placeId,username,ts:Date.now()},...(s.launchHistory||[])]).slice(0,50);
   DB.set(STATS_KEY,s);
-  // also update account
   const acct=getAccount();
   if(acct){
     acct.totalLaunches=(acct.totalLaunches||0)+1;
@@ -244,14 +214,12 @@ function recordLaunch(placeId,username){
     saveAccount(acct);
   }
 }
-function recordLinkGen(placeId){
-  const s=getStats();
-  s.totalLinks=(s.totalLinks||0)+1;
-  DB.set(STATS_KEY,s);
+function recordLinkGen(placeId,label=''){
+  const s=getStats();s.totalLinks=(s.totalLinks||0)+1;DB.set(STATS_KEY,s);
   const acct=getAccount();
   if(acct){
     acct.totalLinksGenerated=(acct.totalLinksGenerated||0)+1;
-    acct.savedLinks=([{placeId,ts:Date.now()},...(acct.savedLinks||[])]).slice(0,20);
+    acct.savedLinks=([{placeId,label,ts:Date.now()},...(acct.savedLinks||[])]).slice(0,20);
     saveAccount(acct);
   }
 }
@@ -267,7 +235,7 @@ function secLog(msg){
 }
 
 // ============================================================
-// URL HELPERS
+// HELPERS
 // ============================================================
 function parsePlaceId(raw){
   raw=(raw||'').trim();if(!raw)return'';
@@ -288,54 +256,48 @@ function parseAllowList(raw){
 }
 function timeAgo(ts){
   const d=Date.now()-ts,m=Math.floor(d/60000),h=Math.floor(d/3600000);
-  if(d<60000)return'just now';
-  if(m<60)return`${m}m ago`;
-  if(h<24)return`${h}h ago`;
-  return`${Math.floor(h/24)}d ago`;
+  if(d<60000)return'just now';if(m<60)return`${m}m ago`;
+  if(h<24)return`${h}h ago`;return`${Math.floor(h/24)}d ago`;
 }
 
-// ============================================================
-// RENDER ENGINE
-// ============================================================
 const root=document.getElementById('root');
 function render(html){root.innerHTML=html;}
 
 // ============================================================
 // VIEW: BLOCKED
 // ============================================================
-function showBlocked(title,msg,ip=''){
-  render(`
-  <div class="card text-center">
+function showBlocked(title,msg){
+  render(`<div class="card text-center">
     <div class="logo-icon red" style="margin:0 auto 14px">
       <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 4l5 2.18V11c0 3.61-2.44 7.01-5 8.07C9.44 18.01 7 14.61 7 11V7.18L12 5zm-1 3v4h2V8h-2zm0 6v2h2v-2h-2z"/></svg>
     </div>
     <div class="page-title">${title}</div>
     <div class="page-sub" style="margin-bottom:16px">${msg}</div>
-    ${ip?`<span class="badge badge-red">${ip}</span>`:''}
     <div class="credits">Credits to ducky</div>
   </div>`);
 }
 
 // ============================================================
-// VIEW: REGISTER / LOGIN
+// VIEW: AUTH
+// role param: 'user' or 'admin' — admin gets extra role badge
 // ============================================================
-function showAuth(tab='register'){
+function showAuth(tab='register',role='user'){
   const acct=getAccount();
-  render(`
-  <div class="card">
-    <div class="logo-icon green" style="margin:0 auto 14px">
-      <svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+  const isAdminReg=role==='admin';
+  render(`<div class="card">
+    <div class="logo-icon ${isAdminReg?'purple':'green'}" style="margin:0 auto 14px">
+      <svg viewBox="0 0 24 24"><path d="${isAdminReg
+        ?'M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z'
+        :'M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z'}"/></svg>
     </div>
     <div class="page-title text-center">Otx Hub</div>
-    <div class="page-sub text-center" style="margin-bottom:20px">Your personal Roblox launch hub</div>
-
+    <div class="page-sub text-center" style="margin-bottom:${isAdminReg?'10px':'20px'}">Your personal Roblox launch hub</div>
+    ${isAdminReg?`<div class="text-center" style="margin-bottom:16px"><span class="badge badge-purple">Admin registration</span></div>`:''}
     <div class="tabs">
-      <button class="tab${tab==='register'?' active':''}" onclick="showAuth('register')">Create account</button>
-      <button class="tab${tab==='login'?' active':''}" onclick="showAuth('login')">Sign in</button>
+      <button class="tab${tab==='register'?' active':''}" onclick="showAuth('register','${role}')">Create account</button>
+      <button class="tab${tab==='login'?' active':''}" onclick="showAuth('login','${role}')">Sign in</button>
     </div>
-
     <div id="auth-alert" class="alert alert-red"></div>
-
     ${tab==='register'?`
     <div class="fg"><label>Username</label>
       <input id="a-user" placeholder="YourUsername" maxlength="20" autocomplete="off">
@@ -347,8 +309,8 @@ function showAuth(tab='register'){
     <div class="fg"><label>Confirm password</label>
       <input type="password" id="a-pass2" placeholder="Repeat password" autocomplete="new-password">
     </div>
-    <button class="btn btn-green" onclick="doRegister()">Create account</button>
-    ${acct?`<p class="hint text-center mt8">Existing account found for <strong>${acct.username}</strong>. <a href="#" style="color:var(--g1)" onclick="showAuth('login')">Sign in instead</a></p>`:''}
+    <button class="btn btn-${isAdminReg?'blue':'green'}" onclick="doRegister('${role}')">Create ${isAdminReg?'admin ':''} account</button>
+    ${acct?`<p class="hint text-center mt8">Existing account: <strong>${acct.username}</strong>. <a href="#" style="color:var(--g1)" onclick="showAuth('login','${role}')">Sign in</a></p>`:''}
     `:`
     <div class="fg"><label>Username</label>
       <input id="a-user" placeholder="YourUsername" maxlength="20" autocomplete="username">
@@ -356,72 +318,76 @@ function showAuth(tab='register'){
     <div class="fg"><label>Password</label>
       <input type="password" id="a-pass" placeholder="Your password" autocomplete="current-password">
     </div>
-    <button class="btn btn-green" onclick="doLogin()">Sign in</button>
+    <button class="btn btn-green" onclick="doLogin('${role}')">Sign in</button>
     ${acct?`<p class="hint text-center mt8">Account: <strong>${acct.username}</strong></p>`:''}
     `}
     <input class="hp" type="text" id="_hp1" tabindex="-1" autocomplete="off">
     <input class="hp" type="text" id="_hp2" tabindex="-1" autocomplete="off">
     <div class="credits">Credits to ducky</div>
   </div>`);
-
-  // Enter key support
   setTimeout(()=>{
     ['a-user','a-pass','a-pass2'].forEach(id=>{
       const el=document.getElementById(id);
-      if(el)el.addEventListener('keydown',e=>{if(e.key==='Enter'){tab==='register'?doRegister():doLogin();}});
+      if(el)el.addEventListener('keydown',e=>{if(e.key==='Enter'){tab==='register'?doRegister(role):doLogin(role);}});
     });
   },0);
 }
 
-function authAlert(msg){
-  const el=document.getElementById('auth-alert');
-  if(!el)return;
-  el.textContent=msg;el.style.display='block';
-}
-function doRegister(){
-  if(checkHp()){secLog('HONEYPOT triggered on register');showBlocked('Bot detected','Automated access blocked.');return;}
+function authAlert(msg){const el=document.getElementById('auth-alert');if(!el)return;el.textContent=msg;el.style.display='block';}
+
+function doRegister(role='user'){
+  if(checkHp()){secLog('HONEYPOT on register');showBlocked('Bot detected','Automated access blocked.');return;}
   const u=(document.getElementById('a-user')?.value||'').trim();
   const p=document.getElementById('a-pass')?.value||'';
   const p2=document.getElementById('a-pass2')?.value||'';
   if(!u||u.length<3){authAlert('Username must be at least 3 characters.');return;}
-  if(!/^[a-zA-Z0-9_]+$/.test(u)){authAlert('Username can only contain letters, numbers, and underscores.');return;}
+  if(!/^[a-zA-Z0-9_]+$/.test(u)){authAlert('Letters, numbers and underscores only.');return;}
   if(!p||p.length<6){authAlert('Password must be at least 6 characters.');return;}
   if(p!==p2){authAlert('Passwords do not match.');return;}
-  const acct=createAccount(u,p);
-  secLog(`Account created: ${acct.username}`);
+  const acct=createAccount(u,p,role);
+  secLog(`Account created: ${acct.username} [${role}]`);
   bumpStat('totalVisits');
   sessionStorage.setItem('_authed','1');
-  showDashboard();
+  showDashboard('home');
 }
-function doLogin(){
-  if(checkHp()){secLog('HONEYPOT triggered on login');showBlocked('Bot detected','Automated access blocked.');return;}
+
+function doLogin(role='user'){
+  if(checkHp()){secLog('HONEYPOT on login');showBlocked('Bot detected','Automated access blocked.');return;}
   const u=(document.getElementById('a-user')?.value||'').trim();
   const p=document.getElementById('a-pass')?.value||'';
   if(!u||!p){authAlert('Enter username and password.');return;}
   const acct=loginAccount(u,p);
-  if(!acct){authAlert('Incorrect username or password.');secLog(`Failed login attempt: ${u}`);return;}
-  secLog(`Login: ${acct.username}`);
+  if(!acct){authAlert('Incorrect username or password.');secLog(`Failed login: ${u}`);return;}
+  secLog(`Login: ${acct.username} [${acct.role}]`);
   sessionStorage.setItem('_authed','1');
-  showDashboard();
-}
-function doRegisterAndAuth(u,p){
-  sessionStorage.setItem('_authed','1');
+  showDashboard('home');
 }
 
 // ============================================================
-// VIEW: DASHBOARD (logged in)
+// VIEW: DASHBOARD
+// Tabs visible depend on role:
+//   user  → Home, History, Settings
+//   admin → Home, Generate, History, Security, Settings
 // ============================================================
 function showDashboard(tab='home'){
   const acct=getAccount();
   if(!acct){showAuth();return;}
+  const admin=acct.role==='admin';
   const stats=getStats();
   const initial=acct.username[0].toUpperCase();
 
-  const tabs=['home','generate','history','security','settings'];
+  // Build tab list based on role
+  const allTabs=admin
+    ?['home','generate','history','security','settings']
+    :['home','history','settings'];
   const tabLabels={home:'Home',generate:'Generate',history:'History',security:'Security',settings:'Settings'};
+
+  // Clamp tab to allowed
+  if(!allTabs.includes(tab))tab='home';
 
   let content='';
 
+  // ---- HOME ----
   if(tab==='home'){
     content=`
     <div class="acct-header">
@@ -430,32 +396,30 @@ function showDashboard(tab='home'){
         <div class="acct-name">${acct.username}</div>
         <div class="acct-since">Member since ${new Date(acct.createdAt).toLocaleDateString()}</div>
       </div>
-      <span class="badge badge-green" style="margin-left:auto">Active</span>
+      <span class="badge ${admin?'badge-purple':'badge-blue'}" style="margin-left:auto">${admin?'Admin':'Member'}</span>
     </div>
-
     <div class="stat-grid">
       <div class="stat-box"><div class="stat-val">${acct.totalLaunches||0}</div><div class="stat-lbl">Total launches</div></div>
-      <div class="stat-box"><div class="stat-val">${acct.totalLinksGenerated||0}</div><div class="stat-lbl">Links generated</div></div>
       <div class="stat-box"><div class="stat-val">${(acct.launchHistory||[]).length}</div><div class="stat-lbl">Launch history</div></div>
-      <div class="stat-box"><div class="stat-val">${(acct.savedLinks||[]).length}</div><div class="stat-lbl">Saved links</div></div>
+      ${admin?`
+      <div class="stat-box"><div class="stat-val">${acct.totalLinksGenerated||0}</div><div class="stat-lbl">Links generated</div></div>
+      <div class="stat-box"><div class="stat-val">${stats.securityBlocks||0}</div><div class="stat-lbl">Threats blocked</div></div>`:`
+      <div class="stat-box"><div class="stat-val">${acct.lastLogin?timeAgo(acct.lastLogin):'—'}</div><div class="stat-lbl">Last login</div></div>
+      <div class="stat-box"><div class="stat-val">${new Date(acct.createdAt).toLocaleDateString()}</div><div class="stat-lbl">Joined</div></div>`}
     </div>
-
     <div class="section-title">Recent launches</div>
     <div class="history-list">
       ${(acct.launchHistory||[]).slice(0,5).map(h=>`
       <div class="history-item">
         <div><div class="hi-name">Place ${h.placeId}</div><div class="hi-meta">as @${h.username||'unknown'}</div></div>
         <div class="hi-right"><span class="badge badge-green">${timeAgo(h.ts)}</span></div>
-      </div>`).join('')||'<div class="hint text-center" style="padding:20px">No launches yet — generate a link and join a game.</div>'}
+      </div>`).join('')||'<div class="hint text-center" style="padding:20px">No launches yet.</div>'}
     </div>
-
     <div class="divider"></div>
-    <div class="section-title">Quick actions</div>
     <div class="gap8">
-      <button class="btn btn-green btn-sm" onclick="showDashboard('generate')">+ Generate link</button>
-      <button class="btn btn-ghost btn-sm" onclick="showDashboard('history')">View history</button>
+      ${admin?`<button class="btn btn-blue btn-sm" onclick="showDashboard('generate')">+ Generate link</button>`:''}
+      <button class="btn btn-ghost btn-sm" onclick="showDashboard('history')">Launch history</button>
     </div>
-
     <div class="divider"></div>
     <div style="display:flex;justify-content:space-between;align-items:center">
       <span class="hint">Last login: ${timeAgo(acct.lastLogin)}</span>
@@ -463,7 +427,8 @@ function showDashboard(tab='home'){
     </div>`;
   }
 
-  else if(tab==='generate'){
+  // ---- GENERATE (admin only) ----
+  else if(tab==='generate'&&admin){
     content=`
     <div class="section-title">Generate launch link</div>
     <div class="fg"><label>Place ID or game URL</label>
@@ -474,12 +439,11 @@ function showDashboard(tab='home'){
       <input id="g-code" placeholder="32-character code or paste server link">
     </div>
     <div class="fg"><label>Invite list (optional)</label>
-      <input id="g-allow" placeholder="Username1, Username2, Username3">
+      <input id="g-allow" placeholder="Username1, Username2">
       <p class="hint">Comma-separated. Only these usernames can launch.</p>
     </div>
     <div class="fg"><label>Link label (optional)</label>
       <input id="g-label" placeholder="e.g. Friday night session" maxlength="40">
-      <p class="hint">Saved with the link in your history for easy identification.</p>
     </div>
     <button class="btn btn-green" onclick="doGenerate()">Generate link</button>
     <div id="gen-alert" class="alert alert-yellow mt8"></div>
@@ -491,72 +455,60 @@ function showDashboard(tab='home'){
         <button class="btn btn-ghost btn-sm" onclick="openGenLink()">Test link</button>
       </div>
     </div>
-
     <div class="divider"></div>
     <div class="section-title">Saved links</div>
     <div class="history-list">
-      ${(acct.savedLinks||[]).slice(0,8).map(l=>`
+      ${(acct.savedLinks||[]).slice(0,10).map(l=>`
       <div class="link-row">
         <div>
           <div class="hi-name">${l.label||`Place ${l.placeId}`}</div>
-          <div class="link-row-id">${l.placeId}</div>
+          <div class="link-row-id">${l.placeId} · ${timeAgo(l.ts)}</div>
         </div>
-        <div class="link-row-actions">
-          <button class="btn btn-ghost btn-sm" onclick="revokeLink('${l.placeId}')">Revoke</button>
-        </div>
-      </div>`).join('')||'<div class="hint text-center" style="padding:16px">No links generated yet.</div>'}
+        <button class="btn btn-ghost btn-sm" onclick="revokeLink('${l.placeId}')">Revoke</button>
+      </div>`).join('')||'<div class="hint text-center" style="padding:16px">No links yet.</div>'}
     </div>`;
   }
 
+  // ---- HISTORY ----
   else if(tab==='history'){
-    const all=(acct.launchHistory||[]);
+    const all=acct.launchHistory||[];
     content=`
     <div class="section-title">Launch history (${all.length})</div>
     <div class="history-list" style="max-height:340px">
       ${all.map(h=>`
       <div class="history-item">
-        <div>
-          <div class="hi-name">Place ${h.placeId}</div>
-          <div class="hi-meta">Joined as @${h.username||'unknown'}</div>
-        </div>
+        <div><div class="hi-name">Place ${h.placeId}</div><div class="hi-meta">as @${h.username||'unknown'}</div></div>
         <div class="hi-right">
-          <div class="hi-name" style="font-size:11px;color:var(--muted)">${new Date(h.ts).toLocaleString()}</div>
+          <div style="font-size:11px;color:var(--muted)">${new Date(h.ts).toLocaleString()}</div>
           <span class="badge badge-green" style="margin-top:4px">${timeAgo(h.ts)}</span>
         </div>
-      </div>`).join('')||'<div class="hint text-center" style="padding:20px">No launch history yet.</div>'}
+      </div>`).join('')||'<div class="hint text-center" style="padding:20px">No launches yet.</div>'}
     </div>
-    ${all.length?`
-    <div class="divider"></div>
-    <div class="stat-grid">
-      <div class="stat-box"><div class="stat-val">${all.length}</div><div class="stat-lbl">Total launches</div></div>
-      <div class="stat-box"><div class="stat-val">${all.length?timeAgo(all[0].ts):'—'}</div><div class="stat-lbl">Last launch</div></div>
-    </div>
+    ${all.length?`<div class="divider"></div>
     <button class="btn btn-ghost btn-sm" onclick="clearHistory()" style="color:#ff5252">Clear history</button>`:''}`;
   }
 
-  else if(tab==='security'){
+  // ---- SECURITY (admin only) ----
+  else if(tab==='security'&&admin){
     const logs=DB.get(SEC_KEY,[]);
-    const blocks=stats.securityBlocks||0;
     content=`
     <div class="section-title">Security overview</div>
     <div class="stat-grid">
-      <div class="stat-box"><div class="stat-val">${blocks}</div><div class="stat-lbl">Blocked requests</div></div>
+      <div class="stat-box"><div class="stat-val">${stats.securityBlocks||0}</div><div class="stat-lbl">Blocked requests</div></div>
       <div class="stat-box"><div class="stat-val">${logs.length}</div><div class="stat-lbl">Security events</div></div>
     </div>
     <div class="section-title">Active protections</div>
     <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px">
-      ${['Rate limiting (12 req/min)','Bot fingerprinting','Honeypot traps','Timing attack detection','Input sanitization','Admin key obfuscation'].map(p=>`
+      ${['Rate limiting (12 req/min)','Bot fingerprinting','Honeypot traps','Timing attack detection','Input sanitization','Admin key obfuscation','Role-based access control'].map(p=>`
       <div style="display:flex;align-items:center;gap:10px;font-size:13px">
-        <span class="badge badge-green" style="width:18px;height:18px;padding:0;display:inline-flex;align-items:center;justify-content:center;border-radius:50%">✓</span>
-        ${p}
+        <span class="badge badge-green" style="width:18px;height:18px;padding:0;display:inline-flex;align-items:center;justify-content:center;border-radius:50%">✓</span>${p}
       </div>`).join('')}
     </div>
     <div class="section-title">Security log</div>
-    <div class="sec-log">${logs.slice(0,30).join('\n')||'No events logged yet.'}</div>
+    <div class="sec-log">${logs.slice(0,30).join('\n')||'No events yet.'}</div>
     <div class="divider"></div>
-
-    <div class="section-title">Link management</div>
-    <div class="fg"><label>Revoke / restore by Place ID</label>
+    <div class="section-title">Link revocation</div>
+    <div class="fg"><label>Place ID to revoke / restore</label>
       <input id="sec-revoke" placeholder="e.g. 1818">
     </div>
     <div class="gap8">
@@ -566,6 +518,7 @@ function showDashboard(tab='home'){
     <div id="sec-alert" class="alert alert-green mt8"></div>`;
   }
 
+  // ---- SETTINGS ----
   else if(tab==='settings'){
     content=`
     <div class="section-title">Account settings</div>
@@ -580,25 +533,22 @@ function showDashboard(tab='home'){
     </div>
     <button class="btn btn-green" onclick="saveSettings()">Save changes</button>
     <div id="set-alert" class="alert alert-green mt8"></div>
-
     <div class="divider"></div>
     <div class="section-title">Data</div>
     <div class="gap8">
       <button class="btn btn-ghost btn-sm" onclick="exportData()">Export my data</button>
       <button class="btn btn-ghost btn-sm" style="color:#ff5252" onclick="deleteAccount()">Delete account</button>
     </div>
-
-    <div class="divider"></div>
-    <div class="section-title">Admin dashboard</div>
-    <p class="hint" style="margin-bottom:12px">Access the original admin panel via URL parameter.</p>
+    ${admin?`<div class="divider"></div>
+    <div class="section-title">Admin tools</div>
+    <p class="hint" style="margin-bottom:12px">Copy your admin panel link to share with yourself.</p>
     <button class="btn btn-ghost btn-sm" onclick="copyAdminLink()">Copy admin link</button>
-    <div id="set-alert2" class="alert alert-green mt8"></div>`;
+    <div id="set-alert2" class="alert alert-green mt8"></div>`:''}`;
   }
 
-  render(`
-  <div class="card">
+  render(`<div class="card">
     <div class="tabs">
-      ${tabs.map(t=>`<button class="tab${tab===t?' active':''}" onclick="showDashboard('${t}')">${tabLabels[t]}</button>`).join('')}
+      ${allTabs.map(t=>`<button class="tab${tab===t?' active':''}" onclick="showDashboard('${t}')">${tabLabels[t]}</button>`).join('')}
     </div>
     ${content}
     <div class="credits">Credits to ducky</div>
@@ -608,13 +558,11 @@ function showDashboard(tab='home'){
 // ============================================================
 // DASHBOARD ACTIONS
 // ============================================================
-function doLogout(){
-  // Don't delete account — just go back to auth
-  showAuth('login');
-}
+function doLogout(){sessionStorage.removeItem('_authed');showAuth('login');}
 
 let _lastGenUrl='';
 function doGenerate(){
+  if(!isAdmin()){showBlocked('Access denied','Admin only.');return;}
   const pid=parsePlaceId(document.getElementById('g-place')?.value||'');
   const parsed=parseServerCode(document.getElementById('g-code')?.value||'');
   const allowUsers=parseAllowList(document.getElementById('g-allow')?.value||'');
@@ -622,34 +570,19 @@ function doGenerate(){
   const alertEl=document.getElementById('gen-alert');
   const outputEl=document.getElementById('gen-output');
   const urlEl=document.getElementById('gen-url');
-  if(alertEl){alertEl.style.display='none';}
-  if(outputEl){outputEl.style.display='none';}
-  if(!pid){
-    if(alertEl){alertEl.textContent='Place ID missing.';alertEl.style.display='block';}
-    return;
-  }
-  if(parsed&&parsed.kind==='share-id'){
-    if(alertEl){alertEl.textContent='That is a share-link ID, not a server code.';alertEl.style.display='block';}
-    return;
-  }
+  if(alertEl)alertEl.style.display='none';
+  if(outputEl)outputEl.style.display='none';
+  if(!pid){if(alertEl){alertEl.textContent='Place ID missing.';alertEl.style.display='block';}return;}
+  if(parsed&&parsed.kind==='share-id'){if(alertEl){alertEl.textContent='That is a share-link ID, not a server code.';alertEl.style.display='block';}return;}
   const base64Id=btoa(pid);
   const baseUrl=window.location.origin+window.location.pathname;
   let url=`${baseUrl}?id=${base64Id}`;
-  if(parsed&&parsed.code){
-    url+=`&linkCode=${encodeURIComponent(parsed.code)}`;
-    if(parsed.kind==='legacy')url+=`&codeKind=legacy`;
-  }
+  if(parsed&&parsed.code){url+=`&linkCode=${encodeURIComponent(parsed.code)}`;if(parsed.kind==='legacy')url+=`&codeKind=legacy`;}
   if(allowUsers.length)url+=`&allow=${encodeURIComponent(btoa(allowUsers.join(',')))}`;
   _lastGenUrl=url;
   if(urlEl)urlEl.textContent=url;
   if(outputEl)outputEl.style.display='block';
-  recordLinkGen(pid);
-  // save with label
-  const acct=getAccount();
-  if(acct){
-    acct.savedLinks=([{placeId:pid,label,ts:Date.now(),url},...(acct.savedLinks||[])]).slice(0,20);
-    saveAccount(acct);
-  }
+  recordLinkGen(pid,label);
   secLog(`Link generated for place ${pid}`);
 }
 function copyGenLink(){
@@ -661,18 +594,20 @@ function copyGenLink(){
 function openGenLink(){if(_lastGenUrl)window.open(_lastGenUrl,'_blank');}
 
 function revokeLink(placeId){
+  if(!isAdmin())return;
   localStorage.setItem(`revoked_${placeId}`,'true');
   secLog(`Link revoked: place ${placeId}`);
   showDashboard('generate');
 }
 
 function doRevoke(shouldRevoke){
+  if(!isAdmin())return;
   const id=parsePlaceId(document.getElementById('sec-revoke')?.value||'');
   const a=document.getElementById('sec-alert');
   if(!id){if(a){a.textContent='Enter a Place ID.';a.style.display='block';}return;}
   if(shouldRevoke){
     localStorage.setItem(`revoked_${id}`,'true');
-    secLog(`Manual revoke: place ${id}`);
+    secLog(`Revoke: place ${id}`);
     if(a){a.textContent=`Place ${id} revoked.`;a.className='alert alert-red mt8';a.style.display='block';}
   }else{
     localStorage.removeItem(`revoked_${id}`);
@@ -682,8 +617,7 @@ function doRevoke(shouldRevoke){
 }
 
 function clearHistory(){
-  const acct=getAccount();
-  if(acct){acct.launchHistory=[];saveAccount(acct);}
+  const acct=getAccount();if(acct){acct.launchHistory=[];saveAccount(acct);}
   showDashboard('history');
 }
 
@@ -700,7 +634,7 @@ function saveSettings(){
     acct.passwordHash=simpleHash(pass);
   }
   saveAccount(acct);
-  if(a){a.className='alert alert-green mt8';a.textContent='Settings saved.';a.style.display='block';}
+  if(a){a.className='alert alert-green mt8';a.textContent='Saved.';a.style.display='block';}
 }
 
 function exportData(){
@@ -714,10 +648,12 @@ function exportData(){
 function deleteAccount(){
   if(!confirm('Delete your account and all data? This cannot be undone.'))return;
   DB.del(ACCT_KEY);DB.del(STATS_KEY);DB.del(SEC_KEY);
+  sessionStorage.removeItem('_authed');
   showAuth('register');
 }
 
 function copyAdminLink(){
+  if(!isAdmin())return;
   const url=`${window.location.origin}${window.location.pathname}?key=${ADMIN_KEY}`;
   navigator.clipboard.writeText(url).then(()=>{
     const a=document.getElementById('set-alert2');
@@ -726,14 +662,13 @@ function copyAdminLink(){
 }
 
 // ============================================================
-// VIEW: LAUNCHER (for users clicking a generated link)
+// VIEW: LAUNCHER
 // ============================================================
 let _placeId='',_rawCode='',_codeKind='',_allowList=[];
 let _verifiedHuman=false;
 
 function showLauncher(){
-  render(`
-  <div class="card">
+  render(`<div class="card">
     <input class="hp" type="text" id="_hp1" tabindex="-1" autocomplete="off">
     <input class="hp" type="text" id="_hp2" tabindex="-1" autocomplete="off">
     <div class="text-center">
@@ -743,35 +678,27 @@ function showLauncher(){
       <div class="page-title">Roblox Launcher</div>
       <div class="page-sub" style="margin-bottom:16px">Launch your game directly from the browser.</div>
     </div>
-
     <div id="verif-badge" class="verif-badge badge-yellow">
       <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
       Move your mouse or tap to continue.
     </div>
-
     ${_rawCode?`<div style="margin-bottom:16px"><span class="badge badge-blue">Server code: ${_rawCode.substring(0,10)}…</span></div>`:''}
-
     <div class="fg">
       <label>Roblox username</label>
       <input id="launch-user" placeholder="YourRobloxUsername" autocomplete="off" spellcheck="false" maxlength="20">
-      <p class="hint" id="launch-hint">${_allowList.length?'Invite-only. Enter the exact username you were invited with.':'Enter your Roblox username to launch.'}</p>
+      <p class="hint">${_allowList.length?'Invite-only. Enter the exact username you were invited with.':'Enter your Roblox username to launch.'}</p>
     </div>
     <div id="launch-alert" class="alert alert-red"></div>
     <button id="launch-btn" class="btn btn-green disabled" onclick="doLaunch()">Join Experience</button>
     <div class="fallback-link" id="fallback-link">
-      Nothing happened? <a id="web-fallback" href="https://www.roblox.com/games/${_placeId}" target="_blank" rel="noopener">Open on Roblox website</a>
+      Nothing happened? <a href="https://www.roblox.com/games/${_placeId}" target="_blank" rel="noopener">Open on Roblox website</a>
     </div>
     <div class="credits">Credits to ducky</div>
   </div>`);
-
   const input=document.getElementById('launch-user');
   if(input){
     input.addEventListener('input',updateLaunchBtn);
-    input.addEventListener('paste',e=>{
-      e.preventDefault();
-      const t=(e.clipboardData||window.clipboardData).getData('text');
-      input.value=sanitize(t);updateLaunchBtn();
-    });
+    input.addEventListener('paste',e=>{e.preventDefault();input.value=sanitize((e.clipboardData||window.clipboardData).getData('text'));updateLaunchBtn();});
     input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!document.getElementById('launch-btn')?.classList.contains('disabled'))doLaunch();});
   }
   initLauncherVerif();
@@ -790,10 +717,7 @@ function initLauncherVerif(){
     if(checkHp()){secLog('HONEYPOT on launcher');showBlocked('Bot detected','Automated access blocked.');return;}
     _verifiedHuman=true;
     const b=document.getElementById('verif-badge');
-    if(b){
-      b.className='verif-badge badge-green';
-      b.innerHTML=`<svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Verified browser connection`;
-    }
+    if(b){b.className='verif-badge badge-green';b.innerHTML=`<svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Verified browser connection`;}
     updateLaunchBtn();
     ['mousemove','touchstart','keydown'].forEach(e=>window.removeEventListener(e,verify));
   }
@@ -808,24 +732,17 @@ function doLaunch(){
   const alertEl=document.getElementById('launch-alert');
   if(!u){if(alertEl){alertEl.textContent='Enter your Roblox username.';alertEl.style.display='block';}return;}
   if(_allowList.length&&!_allowList.includes(u.toLowerCase())){
-    if(alertEl){alertEl.textContent="That username isn't on the invite list.";alertEl.style.display='block';}
-    return;
+    if(alertEl){alertEl.textContent="That username isn't on the invite list.";alertEl.style.display='block';}return;
   }
   if(alertEl)alertEl.style.display='none';
-
-  // Verify sequence
   const badge=document.getElementById('verif-badge');
   const btn=document.getElementById('launch-btn');
   const input=document.getElementById('launch-user');
   if(badge){badge.className='verif-badge badge-yellow';badge.innerHTML=`<span>Verifying @${u}…</span>`;}
   if(btn)btn.classList.add('disabled');
   if(input)input.disabled=true;
-
   setTimeout(()=>{
-    if(badge){
-      badge.className='verif-badge badge-green';
-      badge.innerHTML=`<svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Verified @${u} — launching…`;
-    }
+    if(badge){badge.className='verif-badge badge-green';badge.innerHTML=`<svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Verified @${u} — launching…`;}
     if(btn)btn.textContent='Opening Roblox…';
     setTimeout(()=>{
       let url=`roblox://experiences/start?placeId=${_placeId}`;
@@ -839,19 +756,19 @@ function doLaunch(){
 }
 
 // ============================================================
-// VIEW: ADMIN PANEL (legacy, URL key access)
+// VIEW: LEGACY ADMIN PANEL (URL key access, no account needed)
 // ============================================================
 function showAdmin(){
-  render(`
-  <div class="card">
+  render(`<div class="card">
     <div class="text-center">
-      <div class="logo-icon blue" style="margin:0 auto 14px">
+      <div class="logo-icon purple" style="margin:0 auto 14px">
         <svg viewBox="0 0 24 24"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg>
       </div>
       <div class="page-title">Otx Hub — Admin</div>
-      <div class="page-sub" style="margin-bottom:20px">Generate and manage launch links.</div>
+      <div class="page-sub" style="margin-bottom:8px">Generate and manage launch links.</div>
+      <span class="badge badge-purple" style="margin-bottom:20px">Admin access</span>
     </div>
-
+    <p class="hint" style="margin-bottom:16px">Want the full dashboard? <a href="#" style="color:var(--g1)" onclick="showAuth('register','admin')">Create an admin account</a> or <a href="#" style="color:var(--g1)" onclick="showAuth('login','admin')">sign in</a>.</p>
     <div class="fg"><label>Place ID or game URL</label>
       <input id="a-place" placeholder="1818  —  or paste the full link">
     </div>
@@ -868,9 +785,8 @@ function showAdmin(){
       <div class="output-url" id="adm-url"></div>
       <button class="btn btn-ghost btn-sm mt8" onclick="adminCopy()">Copy</button>
     </div>
-
     <div class="divider"></div>
-    <div class="section-title">Link management</div>
+    <div class="section-title">Link revocation</div>
     <div class="fg"><label>Place ID to revoke / restore</label>
       <input id="adm-revoke" placeholder="e.g. 1818">
     </div>
@@ -920,7 +836,7 @@ function adminRevoke(rev){
 // ============================================================
 (function boot(){
   const fp=getFingerprint();
-  secLog(`Visit from ${fp.ua.substring(0,60)} | ${fp.tz}`);
+  secLog(`Visit | ${fp.tz} | ${fp.ua.substring(0,50)}`);
   bumpStat('totalVisits');
 
   if(checkRate()){
@@ -930,7 +846,7 @@ function adminRevoke(rev){
     return;
   }
   if(detectBot()){
-    secLog('BOT detected: '+getFingerprint().ua.substring(0,80));
+    secLog('BOT detected');
     const s=getStats();s.securityBlocks=(s.securityBlocks||0)+1;DB.set(STATS_KEY,s);
     showBlocked('Bot detected','Automated access is not permitted.');
     return;
@@ -949,23 +865,19 @@ function adminRevoke(rev){
   if(!/^\d+$/.test(_placeId))_placeId='';
 
   const isRevoked=_placeId?localStorage.getItem(`revoked_${_placeId}`)==='true':false;
+  if(isRevoked){showBlocked('Link invalid','This launch URL has been deactivated.');return;}
 
-  if(isRevoked){
-    showBlocked('Link invalid','This launch URL has been deactivated by the admin.');
-    return;
-  }
-
+  // Admin URL key — show legacy admin panel
   if(key===ADMIN_KEY){showAdmin();return;}
 
+  // Launcher link
   if(_placeId){showLauncher();return;}
 
-  // No link params — show account dashboard or auth
+  // Dashboard — require auth
   const acct=getAccount();
-  if(acct){
-    // Verify password on return visit via session flag
-    const sessionAuthed=sessionStorage.getItem('_authed');
-    if(sessionAuthed==='1'){showDashboard();return;}
-    // Ask to sign back in
+  if(acct&&sessionStorage.getItem('_authed')==='1'){
+    showDashboard('home');
+  } else if(acct){
     showAuth('login');
   } else {
     showAuth('register');
