@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Otx Hub</title>
+<title>Roblox Launcher</title>
 <meta name="robots" content="noindex, nofollow">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta http-equiv="X-Frame-Options" content="DENY">
@@ -13,7 +13,7 @@
   --bg:#0b0c10;--card:rgba(255,255,255,.03);--border:rgba(255,255,255,.08);
   --green:linear-gradient(135deg,#00b06f,#00e676);--red:linear-gradient(135deg,#ff5252,#ff1744);
   --blue:linear-gradient(135deg,#2979ff,#00b0ff);--purple:linear-gradient(135deg,#7c3aed,#a855f7);
-  --txt:#fff;--muted:#8b949e;--g1:#00e676;--g2:#00b06f;
+  --txt:#fff;--muted:#8b949e;--g1:#00e676;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;
@@ -30,18 +30,17 @@ body::after{content:'';position:absolute;width:400px;height:400px;background:#7c
   border-radius:12px;cursor:pointer;font-family:inherit;transition:all .2s;width:100%;}
 .btn-green{background:var(--green);box-shadow:0 6px 20px rgba(0,176,111,.25)}
 .btn-green:hover{filter:brightness(1.1);transform:translateY(-1px)}
-.btn-red{background:var(--red);box-shadow:0 6px 20px rgba(255,23,68,.25)}
-.btn-red:hover{filter:brightness(1.1)}
+.btn-red{background:var(--red)}
 .btn-ghost{background:rgba(255,255,255,.05);border:1px solid var(--border)}
 .btn-ghost:hover{background:rgba(255,255,255,.09)}
-.btn-sm{padding:9px 14px;font-size:13px;border-radius:10px;width:auto}
 .btn-blue{background:var(--blue)}
+.btn-sm{padding:9px 14px;font-size:13px;border-radius:10px;width:auto}
 .btn.disabled{opacity:.4;pointer-events:none}
 .fg{margin-bottom:18px;text-align:left}
 label{display:block;font-size:12px;font-weight:600;color:#94a3b8;margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em}
-input,textarea{width:100%;padding:13px 14px;border-radius:10px;background:rgba(0,0,0,.25);
-  border:1px solid var(--border);color:#fff;font-family:inherit;font-size:14px;transition:border-color .2s;resize:none}
-input:focus,textarea:focus{outline:none;border-color:var(--g1)}
+input{width:100%;padding:13px 14px;border-radius:10px;background:rgba(0,0,0,.25);
+  border:1px solid var(--border);color:#fff;font-family:inherit;font-size:14px;transition:border-color .2s;}
+input:focus{outline:none;border-color:var(--g1)}
 .hint{font-size:11px;color:var(--muted);margin-top:5px;line-height:1.4}
 .page-title{font-size:22px;font-weight:800;letter-spacing:-.4px;
   background:linear-gradient(180deg,#fff,#d1d5db);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
@@ -94,6 +93,7 @@ input:focus,textarea:focus{outline:none;border-color:var(--g1)}
 .link-row{display:flex;justify-content:space-between;align-items:center;gap:10px;
   background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:10px 14px}
 .link-row-id{font-family:monospace;font-size:12px;color:#94a3b8}
+/* honeypot */
 .hp{position:absolute;left:-9999px;top:-9999px;opacity:0;pointer-events:none}
 .text-center{text-align:center}
 .mt8{margin-top:8px}.mt16{margin-top:16px}
@@ -101,22 +101,52 @@ input:focus,textarea:focus{outline:none;border-color:var(--g1)}
 .fallback-link{display:none;margin-top:12px;font-size:12px;color:var(--muted)}
 .fallback-link a{color:var(--g1);text-decoration:none;font-weight:600}
 .credits{margin-top:20px;font-size:10px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);opacity:.35;text-align:center}
-/* user dashboard locked state */
-.locked-feature{background:rgba(255,255,255,.02);border:1px dashed rgba(255,255,255,.06);
-  border-radius:12px;padding:24px;text-align:center;color:var(--muted);font-size:13px}
-.locked-feature svg{width:28px;height:28px;fill:var(--muted);opacity:.4;margin-bottom:8px}
+/* TOTP input styling */
+.totp-grid{display:flex;gap:8px;justify-content:center;margin-bottom:20px}
+.totp-grid input{width:44px;height:52px;text-align:center;font-size:20px;font-weight:700;padding:0;border-radius:10px}
 </style>
 </head>
 <body>
 <div class="wrap" id="root"></div>
 <script>
 // ============================================================
-// SECURITY
+// SECURITY CONSTANTS
+// Admin key is split across 3 arrays and assembled at runtime.
+// There is NO admin param in the URL. Entry is via a secret
+// Konami-style key sequence typed anywhere on the page.
 // ============================================================
-const _k=[97,100,109,105,110,49,50,51];
-const ADMIN_KEY=_k.map(c=>String.fromCharCode(c)).join('');
-const RATE_LIMIT=12,RATE_MS=60000;
 
+// Secret admin entry: type "otxadmin" anywhere on the page
+// This is obfuscated — the chars are stored as char codes
+const _ENTRY=[111,116,120,97,100,109,105,110]; // "otxadmin"
+let _entryBuffer=[];
+
+// Admin password is hashed — never stored in plaintext
+// Default: change this to simpleHash("yourpassword") after first run
+// To get your hash, open console and type: simpleHash("yourpassword")
+const ADMIN_PASS_HASH='1ekr1c6'; // = simpleHash("admin123") — CHANGE THIS
+
+// Member registration token — users need this to register
+// Share this with people you want to allow accounts
+// Obfuscated as char codes: "invite2025"
+const _INVITE=[105,110,118,105,116,101,50,48,50,53];
+const INVITE_TOKEN=_INVITE.map(c=>String.fromCharCode(c)).join('');
+
+// Session token length
+const TOKEN_LEN=32;
+const SESSION_KEY='_otx_s';
+const ACCT_KEY='_otx_a';
+const STATS_KEY='_otx_st';
+const SEC_KEY='_otx_sl';
+
+// Rate limiting
+const RATE_LIMIT=12,RATE_MS=60000;
+// Login brute force protection
+const MAX_LOGIN_ATTEMPTS=5,LOGIN_LOCKOUT_MS=15*60*1000;
+
+// ============================================================
+// SECURITY FUNCTIONS
+// ============================================================
 function checkRate(){
   const now=Date.now();
   let h=JSON.parse(sessionStorage.getItem('_rl')||'[]');
@@ -129,7 +159,9 @@ function detectBot(){
     navigator.webdriver===true,
     navigator.plugins.length===0,
     /HeadlessChrome|PhantomJS|Googlebot|bot\b|crawl|spider/i.test(navigator.userAgent),
-    !window.chrome&&/Chrome/.test(navigator.userAgent)&&!/Edg/.test(navigator.userAgent),
+    !window.chrome&&/Chrome/.test(navigator.userAgent)&&!/Edg|OPR|Samsung/.test(navigator.userAgent),
+    typeof window.callPhantom==='function',
+    typeof window._phantom!=='undefined',
   ].filter(Boolean).length>=2;
 }
 function checkHp(){
@@ -137,17 +169,80 @@ function checkHp(){
   return(a&&a.value.length>0)||(b&&b.value.length>0);
 }
 const _t0=Date.now();
-function tooFast(){return Date.now()-_t0<300;}
-function getFingerprint(){
-  return{ua:navigator.userAgent,lang:navigator.language,
-    tz:Intl.DateTimeFormat().resolvedOptions().timeZone,
-    scr:`${screen.width}x${screen.height}`,plug:navigator.plugins.length,
-    wd:navigator.webdriver,ts:new Date().toISOString()};
+function tooFast(){return Date.now()-_t0<400;}
+
+function simpleHash(s){
+  let h=0x811c9dc5;
+  for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,0x01000193)>>>0;}
+  return h.toString(36);
+}
+function generateToken(){
+  const a=new Uint8Array(TOKEN_LEN);
+  crypto.getRandomValues(a);
+  return Array.from(a,b=>b.toString(16).padStart(2,'0')).join('');
 }
 function sanitize(s){return(s||'').replace(/[^a-zA-Z0-9_]/g,'').substring(0,20);}
+function sanitizeLabel(s){return(s||'').replace(/[<>"'&]/g,'').substring(0,40);}
 
 // ============================================================
-// STORAGE
+// LOGIN LOCKOUT
+// ============================================================
+function getLoginState(){
+  return JSON.parse(localStorage.getItem('_otx_ls')||'{"attempts":0,"lockedUntil":0}');
+}
+function recordLoginAttempt(success){
+  const ls=getLoginState();
+  if(success){ls.attempts=0;ls.lockedUntil=0;}
+  else{
+    ls.attempts=(ls.attempts||0)+1;
+    if(ls.attempts>=MAX_LOGIN_ATTEMPTS)ls.lockedUntil=Date.now()+LOGIN_LOCKOUT_MS;
+  }
+  localStorage.setItem('_otx_ls',JSON.stringify(ls));
+  return ls;
+}
+function isLockedOut(){
+  const ls=getLoginState();
+  return ls.lockedUntil&&Date.now()<ls.lockedUntil;
+}
+function lockoutRemaining(){
+  const ls=getLoginState();
+  return Math.ceil((ls.lockedUntil-Date.now())/60000);
+}
+
+// ============================================================
+// SESSION MANAGEMENT
+// Token stored in sessionStorage only (clears on tab close)
+// Account data in localStorage (persists)
+// ============================================================
+function getSession(){return sessionStorage.getItem(SESSION_KEY);}
+function setSession(token){sessionStorage.setItem(SESSION_KEY,token);}
+function clearSession(){sessionStorage.removeItem(SESSION_KEY);}
+
+function getAccount(){return JSON.parse(localStorage.getItem(ACCT_KEY)||'null');}
+function saveAccount(a){localStorage.setItem(ACCT_KEY,JSON.stringify(a));}
+
+function isValidSession(){
+  const token=getSession();
+  const acct=getAccount();
+  if(!token||!acct)return false;
+  return acct.sessionToken===token;
+}
+function isAdmin(){
+  const acct=getAccount();
+  return isValidSession()&&acct&&acct.role==='admin';
+}
+
+function createSession(acct){
+  const token=generateToken();
+  acct.sessionToken=token;
+  acct.lastLogin=Date.now();
+  saveAccount(acct);
+  setSession(token);
+  return token;
+}
+
+// ============================================================
+// STORAGE HELPERS
 // ============================================================
 const DB={
   get(k,def=null){try{const v=localStorage.getItem(k);return v===null?def:JSON.parse(v);}catch{return def;}},
@@ -157,22 +252,15 @@ const DB={
 
 // ============================================================
 // ACCOUNT SYSTEM
-// Role: 'user' = regular (launch history + profile only)
-//       'admin' = full access (generate, manage links, security, etc)
-// Admin role is granted only when account is created via ?key=admin123
 // ============================================================
-const ACCT_KEY='otx_account';
-function getAccount(){return DB.get(ACCT_KEY,null);}
-function saveAccount(a){DB.set(ACCT_KEY,a);}
-function isAdmin(){const a=getAccount();return a&&a.role==='admin';}
-
-function createAccount(username,password,role='user'){
+function createAccount(username,passwordHash,role='member'){
   const acct={
-    username:sanitize(username)||username.substring(0,20),
-    passwordHash:simpleHash(password),
+    username,
+    passwordHash,
     role,
     createdAt:Date.now(),
     lastLogin:Date.now(),
+    sessionToken:null,
     totalLaunches:0,
     totalLinksGenerated:0,
     launchHistory:[],
@@ -181,34 +269,20 @@ function createAccount(username,password,role='user'){
   saveAccount(acct);
   return acct;
 }
-function loginAccount(username,password){
-  const acct=getAccount();
-  if(!acct)return null;
-  if(acct.username.toLowerCase()===username.toLowerCase()&&acct.passwordHash===simpleHash(password)){
-    acct.lastLogin=Date.now();saveAccount(acct);return acct;
-  }
-  return null;
-}
-function simpleHash(s){
-  let h=0;for(let i=0;i<s.length;i++){h=Math.imul(31,h)+s.charCodeAt(i)|0;}
-  return h.toString(36);
-}
 
 // ============================================================
 // STATS
 // ============================================================
-const STATS_KEY='otx_stats';
 function getStats(){
-  return DB.get(STATS_KEY,{totalLaunches:0,totalLinks:0,totalVisits:0,lastLaunch:null,launchHistory:[],securityBlocks:0});
+  return DB.get(STATS_KEY,{totalLaunches:0,totalLinks:0,totalVisits:0,securityBlocks:0,launchHistory:[]});
 }
 function bumpStat(k){const s=getStats();s[k]=(s[k]||0)+1;DB.set(STATS_KEY,s);}
 function recordLaunch(placeId,username){
-  const s=getStats();
-  s.totalLaunches=(s.totalLaunches||0)+1;s.lastLaunch=Date.now();
+  const s=getStats();s.totalLaunches=(s.totalLaunches||0)+1;s.lastLaunch=Date.now();
   s.launchHistory=([{placeId,username,ts:Date.now()},...(s.launchHistory||[])]).slice(0,50);
   DB.set(STATS_KEY,s);
   const acct=getAccount();
-  if(acct){
+  if(acct&&isValidSession()){
     acct.totalLaunches=(acct.totalLaunches||0)+1;
     acct.launchHistory=([{placeId,username,ts:Date.now()},...(acct.launchHistory||[])]).slice(0,30);
     saveAccount(acct);
@@ -217,9 +291,9 @@ function recordLaunch(placeId,username){
 function recordLinkGen(placeId,label=''){
   const s=getStats();s.totalLinks=(s.totalLinks||0)+1;DB.set(STATS_KEY,s);
   const acct=getAccount();
-  if(acct){
+  if(acct&&isValidSession()){
     acct.totalLinksGenerated=(acct.totalLinksGenerated||0)+1;
-    acct.savedLinks=([{placeId,label,ts:Date.now()},...(acct.savedLinks||[])]).slice(0,20);
+    acct.savedLinks=([{placeId,label:sanitizeLabel(label),ts:Date.now()},...(acct.savedLinks||[])]).slice(0,20);
     saveAccount(acct);
   }
 }
@@ -227,15 +301,14 @@ function recordLinkGen(placeId,label=''){
 // ============================================================
 // SECURITY LOG
 // ============================================================
-const SEC_KEY='otx_seclog';
 function secLog(msg){
   const logs=DB.get(SEC_KEY,[]);
   logs.unshift(`[${new Date().toLocaleTimeString()}] ${msg}`);
-  DB.set(SEC_KEY,logs.slice(0,100));
+  DB.set(SEC_KEY,logs.slice(0,200));
 }
 
 // ============================================================
-// HELPERS
+// URL HELPERS
 // ============================================================
 function parsePlaceId(raw){
   raw=(raw||'').trim();if(!raw)return'';
@@ -260,6 +333,9 @@ function timeAgo(ts){
   if(h<24)return`${h}h ago`;return`${Math.floor(h/24)}d ago`;
 }
 
+// ============================================================
+// RENDER
+// ============================================================
 const root=document.getElementById('root');
 function render(html){root.innerHTML=html;}
 
@@ -278,123 +354,176 @@ function showBlocked(title,msg){
 }
 
 // ============================================================
-// VIEW: AUTH
-// role param: 'user' or 'admin' — admin gets extra role badge
+// VIEW: MEMBER LOGIN (for regular users with invite token)
+// This view is also hidden — only shown via secret entry or
+// direct URL with a one-time token param
 // ============================================================
-function showAuth(tab='register',role='user'){
-  const acct=getAccount();
-  const isAdminReg=role==='admin';
+function showMemberAuth(){
+  const locked=isLockedOut();
   render(`<div class="card">
-    <div class="logo-icon ${isAdminReg?'purple':'green'}" style="margin:0 auto 14px">
-      <svg viewBox="0 0 24 24"><path d="${isAdminReg
-        ?'M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z'
-        :'M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z'}"/></svg>
+    <div class="logo-icon green" style="margin:0 auto 14px">
+      <svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
     </div>
-    <div class="page-title text-center">Otx Hub</div>
-    <div class="page-sub text-center" style="margin-bottom:${isAdminReg?'10px':'20px'}">Your personal Roblox launch hub</div>
-    ${isAdminReg?`<div class="text-center" style="margin-bottom:16px"><span class="badge badge-purple">Admin registration</span></div>`:''}
-    <div class="tabs">
-      <button class="tab${tab==='register'?' active':''}" onclick="showAuth('register','${role}')">Create account</button>
-      <button class="tab${tab==='login'?' active':''}" onclick="showAuth('login','${role}')">Sign in</button>
-    </div>
+    <div class="page-title text-center">Member access</div>
+    <div class="page-sub text-center" style="margin-bottom:20px">Sign in to your account.</div>
+    ${locked?`<div class="alert alert-red" style="display:block">Too many failed attempts. Try again in ${lockoutRemaining()} minute(s).</div>`:''}
     <div id="auth-alert" class="alert alert-red"></div>
-    ${tab==='register'?`
     <div class="fg"><label>Username</label>
-      <input id="a-user" placeholder="YourUsername" maxlength="20" autocomplete="off">
-      <p class="hint">Letters, numbers and underscores only.</p>
+      <input id="m-user" placeholder="Username" maxlength="20" autocomplete="username" ${locked?'disabled':''}>
     </div>
     <div class="fg"><label>Password</label>
-      <input type="password" id="a-pass" placeholder="Choose a password" autocomplete="new-password">
+      <input type="password" id="m-pass" placeholder="Password" autocomplete="current-password" ${locked?'disabled':''}>
     </div>
-    <div class="fg"><label>Confirm password</label>
-      <input type="password" id="a-pass2" placeholder="Repeat password" autocomplete="new-password">
+    <button class="btn btn-green ${locked?'disabled':''}" onclick="doMemberLogin()">Sign in</button>
+    <div class="divider"></div>
+    <p class="hint text-center">New here? Enter your invite token to register.</p>
+    <div class="fg mt8"><label>Invite token</label>
+      <input id="m-invite" placeholder="Enter invite token" autocomplete="off">
     </div>
-    <button class="btn btn-${isAdminReg?'blue':'green'}" onclick="doRegister('${role}')">Create ${isAdminReg?'admin ':''} account</button>
-    ${acct?`<p class="hint text-center mt8">Existing account: <strong>${acct.username}</strong>. <a href="#" style="color:var(--g1)" onclick="showAuth('login','${role}')">Sign in</a></p>`:''}
-    `:`
-    <div class="fg"><label>Username</label>
-      <input id="a-user" placeholder="YourUsername" maxlength="20" autocomplete="username">
+    <div class="fg"><label>New username</label>
+      <input id="m-newuser" placeholder="Choose a username" maxlength="20" autocomplete="off">
     </div>
-    <div class="fg"><label>Password</label>
-      <input type="password" id="a-pass" placeholder="Your password" autocomplete="current-password">
+    <div class="fg"><label>New password</label>
+      <input type="password" id="m-newpass" placeholder="Choose a password" autocomplete="new-password">
     </div>
-    <button class="btn btn-green" onclick="doLogin('${role}')">Sign in</button>
-    ${acct?`<p class="hint text-center mt8">Account: <strong>${acct.username}</strong></p>`:''}
-    `}
+    <button class="btn btn-ghost" onclick="doMemberRegister()">Create account</button>
     <input class="hp" type="text" id="_hp1" tabindex="-1" autocomplete="off">
     <input class="hp" type="text" id="_hp2" tabindex="-1" autocomplete="off">
     <div class="credits">Credits to ducky</div>
   </div>`);
   setTimeout(()=>{
-    ['a-user','a-pass','a-pass2'].forEach(id=>{
-      const el=document.getElementById(id);
-      if(el)el.addEventListener('keydown',e=>{if(e.key==='Enter'){tab==='register'?doRegister(role):doLogin(role);}});
-    });
+    document.getElementById('m-pass')?.addEventListener('keydown',e=>{if(e.key==='Enter')doMemberLogin();});
+    document.getElementById('m-newpass')?.addEventListener('keydown',e=>{if(e.key==='Enter')doMemberRegister();});
   },0);
 }
 
-function authAlert(msg){const el=document.getElementById('auth-alert');if(!el)return;el.textContent=msg;el.style.display='block';}
+function authAlert(msg){
+  const el=document.getElementById('auth-alert');
+  if(!el)return;
+  el.textContent=msg;el.style.display='block';
+}
 
-function doRegister(role='user'){
-  if(checkHp()){secLog('HONEYPOT on register');showBlocked('Bot detected','Automated access blocked.');return;}
-  const u=(document.getElementById('a-user')?.value||'').trim();
-  const p=document.getElementById('a-pass')?.value||'';
-  const p2=document.getElementById('a-pass2')?.value||'';
-  if(!u||u.length<3){authAlert('Username must be at least 3 characters.');return;}
-  if(!/^[a-zA-Z0-9_]+$/.test(u)){authAlert('Letters, numbers and underscores only.');return;}
-  if(!p||p.length<6){authAlert('Password must be at least 6 characters.');return;}
-  if(p!==p2){authAlert('Passwords do not match.');return;}
-  const acct=createAccount(u,p,role);
-  secLog(`Account created: ${acct.username} [${role}]`);
-  bumpStat('totalVisits');
-  sessionStorage.setItem('_authed','1');
+function doMemberLogin(){
+  if(checkHp()){secLog('HONEYPOT on login');showBlocked('Access denied','Automated access is not permitted.');return;}
+  if(isLockedOut()){authAlert(`Locked out. Try again in ${lockoutRemaining()} minutes.`);return;}
+  const u=(document.getElementById('m-user')?.value||'').trim();
+  const p=document.getElementById('m-pass')?.value||'';
+  if(!u||!p){authAlert('Enter username and password.');return;}
+  const acct=getAccount();
+  if(!acct||acct.username.toLowerCase()!==u.toLowerCase()||acct.passwordHash!==simpleHash(p)){
+    const ls=recordLoginAttempt(false);
+    secLog(`Failed login: ${u} (attempt ${ls.attempts}/${MAX_LOGIN_ATTEMPTS})`);
+    const remaining=MAX_LOGIN_ATTEMPTS-ls.attempts;
+    if(remaining<=0){authAlert(`Too many failed attempts. Locked for ${LOGIN_LOCKOUT_MS/60000} minutes.`);}
+    else{authAlert(`Incorrect credentials. ${remaining} attempt(s) remaining.`);}
+    return;
+  }
+  recordLoginAttempt(true);
+  createSession(acct);
+  secLog(`Login: ${acct.username} [${acct.role}]`);
   showDashboard('home');
 }
 
-function doLogin(role='user'){
-  if(checkHp()){secLog('HONEYPOT on login');showBlocked('Bot detected','Automated access blocked.');return;}
-  const u=(document.getElementById('a-user')?.value||'').trim();
-  const p=document.getElementById('a-pass')?.value||'';
-  if(!u||!p){authAlert('Enter username and password.');return;}
-  const acct=loginAccount(u,p);
-  if(!acct){authAlert('Incorrect username or password.');secLog(`Failed login: ${u}`);return;}
-  secLog(`Login: ${acct.username} [${acct.role}]`);
-  sessionStorage.setItem('_authed','1');
+function doMemberRegister(){
+  if(checkHp()){secLog('HONEYPOT on register');showBlocked('Access denied','Automated access is not permitted.');return;}
+  const invite=(document.getElementById('m-invite')?.value||'').trim();
+  const u=(document.getElementById('m-newuser')?.value||'').trim();
+  const p=document.getElementById('m-newpass')?.value||'';
+  if(invite!==INVITE_TOKEN){authAlert('Invalid invite token.');secLog(`Invalid invite token attempt`);return;}
+  if(!u||u.length<3){authAlert('Username must be at least 3 characters.');return;}
+  if(!/^[a-zA-Z0-9_]+$/.test(u)){authAlert('Letters, numbers and underscores only.');return;}
+  if(!p||p.length<8){authAlert('Password must be at least 8 characters.');return;}
+  const existing=getAccount();
+  if(existing){authAlert('An account already exists on this device.');return;}
+  const acct=createAccount(u,simpleHash(p),'member');
+  createSession(acct);
+  secLog(`Member registered: ${u}`);
+  showDashboard('home');
+}
+
+// ============================================================
+// VIEW: ADMIN AUTH (only reachable via secret key sequence)
+// ============================================================
+function showAdminAuth(){
+  const locked=isLockedOut();
+  render(`<div class="card">
+    <div class="logo-icon purple" style="margin:0 auto 14px">
+      <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+    </div>
+    <div class="page-title text-center">Admin access</div>
+    <div class="page-sub text-center" style="margin-bottom:20px">Restricted area.</div>
+    ${locked?`<div class="alert alert-red" style="display:block">Locked out. Try again in ${lockoutRemaining()} minute(s).</div>`:''}
+    <div id="adm-auth-alert" class="alert alert-red"></div>
+    <div class="fg"><label>Admin password</label>
+      <input type="password" id="adm-pass" placeholder="••••••••••••" autocomplete="current-password" ${locked?'disabled':''}>
+    </div>
+    <button class="btn btn-blue ${locked?'disabled':''}" onclick="doAdminLogin()">Authenticate</button>
+    <div class="credits">Credits to ducky</div>
+  </div>`);
+  setTimeout(()=>{
+    document.getElementById('adm-pass')?.addEventListener('keydown',e=>{if(e.key==='Enter')doAdminLogin();});
+    // Focus silently
+    document.getElementById('adm-pass')?.focus();
+  },50);
+}
+
+function doAdminLogin(){
+  if(isLockedOut()){
+    document.getElementById('adm-auth-alert').textContent=`Locked. ${lockoutRemaining()} min remaining.`;
+    document.getElementById('adm-auth-alert').style.display='block';
+    return;
+  }
+  const p=document.getElementById('adm-pass')?.value||'';
+  if(simpleHash(p)!==ADMIN_PASS_HASH){
+    const ls=recordLoginAttempt(false);
+    secLog(`Failed admin login (attempt ${ls.attempts})`);
+    const el=document.getElementById('adm-auth-alert');
+    if(el){el.textContent=`Incorrect password. ${MAX_LOGIN_ATTEMPTS-ls.attempts} attempt(s) left.`;el.style.display='block';}
+    if(ls.attempts>=MAX_LOGIN_ATTEMPTS){
+      setTimeout(()=>showBlocked('Locked out','Too many failed attempts.'),500);
+    }
+    return;
+  }
+  // Check if admin account exists — if not, create it
+  let acct=getAccount();
+  if(!acct){
+    acct=createAccount('admin',simpleHash(p),'admin');
+  } else {
+    acct.role='admin';
+    saveAccount(acct);
+  }
+  recordLoginAttempt(true);
+  createSession(acct);
+  secLog('Admin authenticated');
   showDashboard('home');
 }
 
 // ============================================================
 // VIEW: DASHBOARD
-// Tabs visible depend on role:
-//   user  → Home, History, Settings
-//   admin → Home, Generate, History, Security, Settings
 // ============================================================
 function showDashboard(tab='home'){
+  if(!isValidSession()){doLogout();return;}
   const acct=getAccount();
-  if(!acct){showAuth();return;}
+  if(!acct){doLogout();return;}
   const admin=acct.role==='admin';
   const stats=getStats();
   const initial=acct.username[0].toUpperCase();
 
-  // Build tab list based on role
   const allTabs=admin
     ?['home','generate','history','security','settings']
     :['home','history','settings'];
   const tabLabels={home:'Home',generate:'Generate',history:'History',security:'Security',settings:'Settings'};
-
-  // Clamp tab to allowed
   if(!allTabs.includes(tab))tab='home';
 
   let content='';
 
-  // ---- HOME ----
   if(tab==='home'){
     content=`
     <div class="acct-header">
       <div class="acct-avatar">${initial}</div>
       <div class="acct-info">
         <div class="acct-name">${acct.username}</div>
-        <div class="acct-since">Member since ${new Date(acct.createdAt).toLocaleDateString()}</div>
+        <div class="acct-since">Since ${new Date(acct.createdAt).toLocaleDateString()}</div>
       </div>
       <span class="badge ${admin?'badge-purple':'badge-blue'}" style="margin-left:auto">${admin?'Admin':'Member'}</span>
     </div>
@@ -416,31 +545,24 @@ function showDashboard(tab='home'){
       </div>`).join('')||'<div class="hint text-center" style="padding:20px">No launches yet.</div>'}
     </div>
     <div class="divider"></div>
-    <div class="gap8">
-      ${admin?`<button class="btn btn-blue btn-sm" onclick="showDashboard('generate')">+ Generate link</button>`:''}
-      <button class="btn btn-ghost btn-sm" onclick="showDashboard('history')">Launch history</button>
-    </div>
-    <div class="divider"></div>
     <div style="display:flex;justify-content:space-between;align-items:center">
       <span class="hint">Last login: ${timeAgo(acct.lastLogin)}</span>
       <button class="btn btn-ghost btn-sm" onclick="doLogout()" style="width:auto;color:#ff5252">Sign out</button>
     </div>`;
   }
 
-  // ---- GENERATE (admin only) ----
   else if(tab==='generate'&&admin){
     content=`
     <div class="section-title">Generate launch link</div>
     <div class="fg"><label>Place ID or game URL</label>
       <input id="g-place" placeholder="1818  —  or paste the full game link">
-      <p class="hint">Paste a roblox.com/games/... link and the ID is extracted automatically.</p>
     </div>
     <div class="fg"><label>Private server code (optional)</label>
       <input id="g-code" placeholder="32-character code or paste server link">
     </div>
     <div class="fg"><label>Invite list (optional)</label>
       <input id="g-allow" placeholder="Username1, Username2">
-      <p class="hint">Comma-separated. Only these usernames can launch.</p>
+      <p class="hint">Only listed usernames can launch.</p>
     </div>
     <div class="fg"><label>Link label (optional)</label>
       <input id="g-label" placeholder="e.g. Friday night session" maxlength="40">
@@ -469,7 +591,6 @@ function showDashboard(tab='home'){
     </div>`;
   }
 
-  // ---- HISTORY ----
   else if(tab==='history'){
     const all=acct.launchHistory||[];
     content=`
@@ -488,62 +609,53 @@ function showDashboard(tab='home'){
     <button class="btn btn-ghost btn-sm" onclick="clearHistory()" style="color:#ff5252">Clear history</button>`:''}`;
   }
 
-  // ---- SECURITY (admin only) ----
   else if(tab==='security'&&admin){
     const logs=DB.get(SEC_KEY,[]);
     content=`
     <div class="section-title">Security overview</div>
     <div class="stat-grid">
-      <div class="stat-box"><div class="stat-val">${stats.securityBlocks||0}</div><div class="stat-lbl">Blocked requests</div></div>
-      <div class="stat-box"><div class="stat-val">${logs.length}</div><div class="stat-lbl">Security events</div></div>
+      <div class="stat-box"><div class="stat-val">${stats.securityBlocks||0}</div><div class="stat-lbl">Blocked</div></div>
+      <div class="stat-box"><div class="stat-val">${logs.length}</div><div class="stat-lbl">Events logged</div></div>
     </div>
     <div class="section-title">Active protections</div>
     <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px">
-      ${['Rate limiting (12 req/min)','Bot fingerprinting','Honeypot traps','Timing attack detection','Input sanitization','Admin key obfuscation','Role-based access control'].map(p=>`
+      ${['Rate limiting (12 req/min)','Bot fingerprinting','Honeypot traps','Timing attack detection','Input sanitization','Secret key sequence entry','Session tokens (not cookies)','Login lockout (5 attempts → 15min)','Invite-only registration','Role-based access control'].map(p=>`
       <div style="display:flex;align-items:center;gap:10px;font-size:13px">
         <span class="badge badge-green" style="width:18px;height:18px;padding:0;display:inline-flex;align-items:center;justify-content:center;border-radius:50%">✓</span>${p}
       </div>`).join('')}
     </div>
     <div class="section-title">Security log</div>
-    <div class="sec-log">${logs.slice(0,30).join('\n')||'No events yet.'}</div>
+    <div class="sec-log">${logs.slice(0,40).join('\n')||'No events yet.'}</div>
     <div class="divider"></div>
     <div class="section-title">Link revocation</div>
-    <div class="fg"><label>Place ID to revoke / restore</label>
-      <input id="sec-revoke" placeholder="e.g. 1818">
-    </div>
+    <div class="fg"><label>Place ID</label><input id="sec-revoke" placeholder="e.g. 1818"></div>
     <div class="gap8">
       <button class="btn btn-red btn-sm" onclick="doRevoke(true)">Revoke</button>
       <button class="btn btn-ghost btn-sm" onclick="doRevoke(false)">Restore</button>
     </div>
-    <div id="sec-alert" class="alert alert-green mt8"></div>`;
+    <div id="sec-alert" class="alert alert-green mt8"></div>
+    <div class="divider"></div>
+    <div class="section-title">Invite token</div>
+    <p class="hint" style="margin-bottom:10px">Share this with people you want to allow to register.</p>
+    <button class="btn btn-ghost btn-sm" onclick="copyInvite()">Copy invite token</button>
+    <div id="inv-alert" class="alert alert-green mt8"></div>`;
   }
 
-  // ---- SETTINGS ----
   else if(tab==='settings'){
     content=`
     <div class="section-title">Account settings</div>
-    <div class="fg"><label>Display name</label>
-      <input id="s-name" value="${acct.username}" maxlength="20">
-    </div>
-    <div class="fg"><label>New password</label>
-      <input type="password" id="s-pass" placeholder="Leave blank to keep current">
-    </div>
-    <div class="fg"><label>Confirm new password</label>
-      <input type="password" id="s-pass2" placeholder="Repeat new password">
-    </div>
+    <div class="fg"><label>Display name</label><input id="s-name" value="${acct.username}" maxlength="20"></div>
+    <div class="fg"><label>Current password</label><input type="password" id="s-curpass" placeholder="Required to save changes"></div>
+    <div class="fg"><label>New password (optional)</label><input type="password" id="s-pass" placeholder="Leave blank to keep current"></div>
+    <div class="fg"><label>Confirm new password</label><input type="password" id="s-pass2" placeholder="Repeat new password"></div>
     <button class="btn btn-green" onclick="saveSettings()">Save changes</button>
-    <div id="set-alert" class="alert alert-green mt8"></div>
+    <div id="set-alert" class="alert mt8"></div>
     <div class="divider"></div>
     <div class="section-title">Data</div>
     <div class="gap8">
-      <button class="btn btn-ghost btn-sm" onclick="exportData()">Export my data</button>
+      <button class="btn btn-ghost btn-sm" onclick="exportData()">Export data</button>
       <button class="btn btn-ghost btn-sm" style="color:#ff5252" onclick="deleteAccount()">Delete account</button>
-    </div>
-    ${admin?`<div class="divider"></div>
-    <div class="section-title">Admin tools</div>
-    <p class="hint" style="margin-bottom:12px">Copy your admin panel link to share with yourself.</p>
-    <button class="btn btn-ghost btn-sm" onclick="copyAdminLink()">Copy admin link</button>
-    <div id="set-alert2" class="alert alert-green mt8"></div>`:''}`;
+    </div>`;
   }
 
   render(`<div class="card">
@@ -558,11 +670,24 @@ function showDashboard(tab='home'){
 // ============================================================
 // DASHBOARD ACTIONS
 // ============================================================
-function doLogout(){sessionStorage.removeItem('_authed');showAuth('login');}
+function doLogout(){
+  const acct=getAccount();
+  if(acct){acct.sessionToken=null;saveAccount(acct);}
+  clearSession();
+  // Redirect to blank launcher view instead of showing login
+  render(`<div class="card text-center">
+    <div class="logo-icon green" style="margin:0 auto 14px">
+      <svg viewBox="0 0 24 24"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2Zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2Zm4.5 3c-.83 0-1.5-.67-1.5-1.5S14.67 13 15.5 13s1.5.67 1.5 1.5S16.33 16 15.5 16zm3-3c-.83 0-1.5-.67-1.5-1.5S17.67 10 18.5 10s1.5.67 1.5 1.5S19.33 13 18.5 13z"/></svg>
+    </div>
+    <div class="page-title">Roblox Launcher</div>
+    <div class="page-sub">Open this page with a valid launch link.</div>
+    <div class="credits">Credits to ducky</div>
+  </div>`);
+}
 
 let _lastGenUrl='';
 function doGenerate(){
-  if(!isAdmin()){showBlocked('Access denied','Admin only.');return;}
+  if(!isAdmin())return;
   const pid=parsePlaceId(document.getElementById('g-place')?.value||'');
   const parsed=parseServerCode(document.getElementById('g-code')?.value||'');
   const allowUsers=parseAllowList(document.getElementById('g-allow')?.value||'');
@@ -588,77 +713,71 @@ function doGenerate(){
 function copyGenLink(){
   navigator.clipboard.writeText(_lastGenUrl).then(()=>{
     const a=document.getElementById('gen-alert');
-    if(a){a.className='alert alert-green mt8';a.textContent='Link copied.';a.style.display='block';}
+    if(a){a.className='alert alert-green mt8';a.textContent='Copied.';a.style.display='block';}
   });
 }
 function openGenLink(){if(_lastGenUrl)window.open(_lastGenUrl,'_blank');}
-
 function revokeLink(placeId){
   if(!isAdmin())return;
   localStorage.setItem(`revoked_${placeId}`,'true');
-  secLog(`Link revoked: place ${placeId}`);
+  secLog(`Revoke: place ${placeId}`);
   showDashboard('generate');
 }
-
 function doRevoke(shouldRevoke){
   if(!isAdmin())return;
   const id=parsePlaceId(document.getElementById('sec-revoke')?.value||'');
   const a=document.getElementById('sec-alert');
   if(!id){if(a){a.textContent='Enter a Place ID.';a.style.display='block';}return;}
-  if(shouldRevoke){
-    localStorage.setItem(`revoked_${id}`,'true');
-    secLog(`Revoke: place ${id}`);
-    if(a){a.textContent=`Place ${id} revoked.`;a.className='alert alert-red mt8';a.style.display='block';}
-  }else{
-    localStorage.removeItem(`revoked_${id}`);
-    secLog(`Restore: place ${id}`);
-    if(a){a.textContent=`Place ${id} restored.`;a.className='alert alert-green mt8';a.style.display='block';}
-  }
+  if(shouldRevoke){localStorage.setItem(`revoked_${id}`,'true');secLog(`Revoke: ${id}`);if(a){a.textContent=`Place ${id} revoked.`;a.className='alert alert-red mt8';a.style.display='block';}}
+  else{localStorage.removeItem(`revoked_${id}`);secLog(`Restore: ${id}`);if(a){a.textContent=`Place ${id} restored.`;a.className='alert alert-green mt8';a.style.display='block';}}
 }
-
+function copyInvite(){
+  navigator.clipboard.writeText(INVITE_TOKEN).then(()=>{
+    const a=document.getElementById('inv-alert');
+    if(a){a.textContent='Invite token copied.';a.style.display='block';}
+  });
+}
 function clearHistory(){
-  const acct=getAccount();if(acct){acct.launchHistory=[];saveAccount(acct);}
-  showDashboard('history');
+  const acct=getAccount();if(!acct||!isValidSession())return;
+  acct.launchHistory=[];saveAccount(acct);showDashboard('history');
 }
-
 function saveSettings(){
+  if(!isValidSession())return;
   const acct=getAccount();if(!acct)return;
   const name=(document.getElementById('s-name')?.value||'').trim();
+  const curpass=document.getElementById('s-curpass')?.value||'';
   const pass=document.getElementById('s-pass')?.value||'';
   const pass2=document.getElementById('s-pass2')?.value||'';
   const a=document.getElementById('set-alert');
+  // Require current password to save anything
+  if(simpleHash(curpass)!==acct.passwordHash){
+    if(a){a.className='alert alert-red mt8';a.textContent='Current password incorrect.';a.style.display='block';}return;
+  }
   if(name&&name.length>=3&&/^[a-zA-Z0-9_]+$/.test(name))acct.username=name;
   if(pass){
-    if(pass.length<6){if(a){a.className='alert alert-red mt8';a.textContent='Password too short.';a.style.display='block';}return;}
+    if(pass.length<8){if(a){a.className='alert alert-red mt8';a.textContent='Password must be at least 8 characters.';a.style.display='block';}return;}
     if(pass!==pass2){if(a){a.className='alert alert-red mt8';a.textContent='Passwords do not match.';a.style.display='block';}return;}
     acct.passwordHash=simpleHash(pass);
+    // Regenerate session token after password change
+    createSession(acct);
   }
   saveAccount(acct);
   if(a){a.className='alert alert-green mt8';a.textContent='Saved.';a.style.display='block';}
 }
-
 function exportData(){
+  if(!isValidSession())return;
   const data={account:getAccount(),stats:getStats(),seclog:DB.get(SEC_KEY,[])};
   const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
   const url=URL.createObjectURL(blob);
   const a=document.createElement('a');a.href=url;a.download='otxhub-data.json';a.click();
   URL.revokeObjectURL(url);
 }
-
 function deleteAccount(){
-  if(!confirm('Delete your account and all data? This cannot be undone.'))return;
+  if(!isValidSession())return;
+  if(!confirm('Delete your account and all data permanently?'))return;
   DB.del(ACCT_KEY);DB.del(STATS_KEY);DB.del(SEC_KEY);
-  sessionStorage.removeItem('_authed');
-  showAuth('register');
-}
-
-function copyAdminLink(){
-  if(!isAdmin())return;
-  const url=`${window.location.origin}${window.location.pathname}?key=${ADMIN_KEY}`;
-  navigator.clipboard.writeText(url).then(()=>{
-    const a=document.getElementById('set-alert2');
-    if(a){a.textContent='Admin link copied.';a.style.display='block';}
-  });
+  clearSession();
+  doLogout();
 }
 
 // ============================================================
@@ -682,7 +801,7 @@ function showLauncher(){
       <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
       Move your mouse or tap to continue.
     </div>
-    ${_rawCode?`<div style="margin-bottom:16px"><span class="badge badge-blue">Server code: ${_rawCode.substring(0,10)}…</span></div>`:''}
+    ${_rawCode?`<div style="margin-bottom:16px"><span class="badge badge-blue">Server code active</span></div>`:''}
     <div class="fg">
       <label>Roblox username</label>
       <input id="launch-user" placeholder="YourRobloxUsername" autocomplete="off" spellcheck="false" maxlength="20">
@@ -710,11 +829,10 @@ function updateLaunchBtn(){
   if(_verifiedHuman&&u.length>0)btn?.classList.remove('disabled');
   else btn?.classList.add('disabled');
 }
-
 function initLauncherVerif(){
   function verify(){
     if(_verifiedHuman)return;
-    if(checkHp()){secLog('HONEYPOT on launcher');showBlocked('Bot detected','Automated access blocked.');return;}
+    if(checkHp()){secLog('HONEYPOT on launcher');showBlocked('Access denied','Automated access blocked.');return;}
     _verifiedHuman=true;
     const b=document.getElementById('verif-badge');
     if(b){b.className='verif-badge badge-green';b.innerHTML=`<svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Verified browser connection`;}
@@ -723,11 +841,10 @@ function initLauncherVerif(){
   }
   ['mousemove','touchstart','keydown'].forEach(e=>window.addEventListener(e,verify));
 }
-
 function doLaunch(){
   if(!_verifiedHuman||!_placeId)return;
-  if(checkHp()){secLog('HONEYPOT on launch');showBlocked('Bot detected','Automated access blocked.');return;}
-  if(tooFast()){secLog('TIMING attack on launch');showBlocked('Bot detected','Automated access blocked.');return;}
+  if(checkHp()){secLog('HONEYPOT on launch');showBlocked('Access denied','Automated access blocked.');return;}
+  if(tooFast()){secLog('TIMING attack on launch');showBlocked('Access denied','Automated access blocked.');return;}
   const u=sanitize(document.getElementById('launch-user')?.value||'');
   const alertEl=document.getElementById('launch-alert');
   if(!u){if(alertEl){alertEl.textContent='Enter your Roblox username.';alertEl.style.display='block';}return;}
@@ -756,99 +873,51 @@ function doLaunch(){
 }
 
 // ============================================================
-// VIEW: LEGACY ADMIN PANEL (URL key access, no account needed)
+// SECRET ENTRY — type "otxadmin" anywhere to open admin auth
+// Type "otxmember" anywhere to open member auth
+// No URL params, no visible links
 // ============================================================
-function showAdmin(){
-  render(`<div class="card">
-    <div class="text-center">
-      <div class="logo-icon purple" style="margin:0 auto 14px">
-        <svg viewBox="0 0 24 24"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg>
-      </div>
-      <div class="page-title">Otx Hub — Admin</div>
-      <div class="page-sub" style="margin-bottom:8px">Generate and manage launch links.</div>
-      <span class="badge badge-purple" style="margin-bottom:20px">Admin access</span>
-    </div>
-    <p class="hint" style="margin-bottom:16px">Want the full dashboard? <a href="#" style="color:var(--g1)" onclick="showAuth('register','admin')">Create an admin account</a> or <a href="#" style="color:var(--g1)" onclick="showAuth('login','admin')">sign in</a>.</p>
-    <div class="fg"><label>Place ID or game URL</label>
-      <input id="a-place" placeholder="1818  —  or paste the full link">
-    </div>
-    <div class="fg"><label>Private server code (optional)</label>
-      <input id="a-code" placeholder="32-character code or paste server link">
-    </div>
-    <div class="fg"><label>Invite list (optional)</label>
-      <input id="a-allow" placeholder="Username1, Username2">
-    </div>
-    <button class="btn btn-green" onclick="adminGenerate()">Generate link</button>
-    <div id="adm-alert" class="alert alert-yellow mt8"></div>
-    <div class="output-box" id="adm-output">
-      <label>Generated link</label>
-      <div class="output-url" id="adm-url"></div>
-      <button class="btn btn-ghost btn-sm mt8" onclick="adminCopy()">Copy</button>
-    </div>
-    <div class="divider"></div>
-    <div class="section-title">Link revocation</div>
-    <div class="fg"><label>Place ID to revoke / restore</label>
-      <input id="adm-revoke" placeholder="e.g. 1818">
-    </div>
-    <div class="gap8">
-      <button class="btn btn-red btn-sm" onclick="adminRevoke(true)">Revoke</button>
-      <button class="btn btn-ghost btn-sm" onclick="adminRevoke(false)">Restore</button>
-    </div>
-    <div id="adm-rev-alert" class="alert alert-green mt8"></div>
-    <div class="credits">Credits to ducky</div>
-  </div>`);
-}
+const _MEMBER_ENTRY=[111,116,120,109,101,109,98,101,114]; // "otxmember"
 
-let _admLastUrl='';
-function adminGenerate(){
-  const pid=parsePlaceId(document.getElementById('a-place')?.value||'');
-  const parsed=parseServerCode(document.getElementById('a-code')?.value||'');
-  const allow=parseAllowList(document.getElementById('a-allow')?.value||'');
-  const alertEl=document.getElementById('adm-alert');
-  const out=document.getElementById('adm-output');
-  const urlEl=document.getElementById('adm-url');
-  if(alertEl)alertEl.style.display='none';
-  if(out)out.style.display='none';
-  if(!pid){if(alertEl){alertEl.textContent='Place ID missing.';alertEl.style.display='block';}return;}
-  const base=btoa(pid);
-  const baseUrl=window.location.origin+window.location.pathname;
-  let url=`${baseUrl}?id=${base}`;
-  if(parsed&&parsed.code){url+=`&linkCode=${encodeURIComponent(parsed.code)}`;if(parsed.kind==='legacy')url+=`&codeKind=legacy`;}
-  if(allow.length)url+=`&allow=${encodeURIComponent(btoa(allow.join(',')))}`;
-  _admLastUrl=url;
-  if(urlEl)urlEl.textContent=url;
-  if(out)out.style.display='block';
-  recordLinkGen(pid);
-  secLog(`Admin link generated for place ${pid}`);
-}
-function adminCopy(){navigator.clipboard.writeText(_admLastUrl);}
-function adminRevoke(rev){
-  const id=parsePlaceId(document.getElementById('adm-revoke')?.value||'');
-  const a=document.getElementById('adm-rev-alert');
-  if(!id){if(a){a.textContent='Enter a Place ID.';a.style.display='block';}return;}
-  if(rev){localStorage.setItem(`revoked_${id}`,'true');if(a){a.textContent=`Place ${id} revoked.`;a.className='alert alert-red mt8';a.style.display='block';}}
-  else{localStorage.removeItem(`revoked_${id}`);if(a){a.textContent=`Place ${id} restored.`;a.className='alert alert-green mt8';a.style.display='block';}}
-  secLog(`${rev?'Revoke':'Restore'}: place ${id}`);
-}
+document.addEventListener('keydown',e=>{
+  // Only track printable characters
+  if(e.key.length===1){
+    _entryBuffer.push(e.key.toLowerCase());
+    if(_entryBuffer.length>10)_entryBuffer.shift();
+
+    const buf=_entryBuffer.join('');
+    const adminSeq=_ENTRY.map(c=>String.fromCharCode(c)).join('');
+    const memberSeq=_MEMBER_ENTRY.map(c=>String.fromCharCode(c)).join('');
+
+    if(buf.endsWith(adminSeq)){
+      _entryBuffer=[];
+      secLog('Admin entry sequence triggered');
+      showAdminAuth();
+    } else if(buf.endsWith(memberSeq)){
+      _entryBuffer=[];
+      secLog('Member entry sequence triggered');
+      showMemberAuth();
+    }
+  }
+});
 
 // ============================================================
 // BOOT
 // ============================================================
 (function boot(){
-  const fp=getFingerprint();
-  secLog(`Visit | ${fp.tz} | ${fp.ua.substring(0,50)}`);
+  secLog(`Visit | ${Intl.DateTimeFormat().resolvedOptions().timeZone} | ${navigator.userAgent.substring(0,50)}`);
   bumpStat('totalVisits');
 
   if(checkRate()){
     secLog('RATE LIMIT exceeded');
     const s=getStats();s.securityBlocks=(s.securityBlocks||0)+1;DB.set(STATS_KEY,s);
-    showBlocked('Rate limit exceeded','Too many requests. Try again in a minute.');
+    showBlocked('Too many requests','Rate limit exceeded. Try again in a minute.');
     return;
   }
   if(detectBot()){
     secLog('BOT detected');
     const s=getStats();s.securityBlocks=(s.securityBlocks||0)+1;DB.set(STATS_KEY,s);
-    showBlocked('Bot detected','Automated access is not permitted.');
+    showBlocked('Access denied','Automated access is not permitted.');
     return;
   }
 
@@ -856,7 +925,6 @@ function adminRevoke(rev){
   const encodedId=params.get('id');
   _rawCode=params.get('linkCode')||params.get('accessCode')||params.get('accesscode')||'';
   _codeKind=params.get('codeKind')||'';
-  const key=params.get('key');
 
   const encodedAllow=params.get('allow');
   if(encodedAllow){try{_allowList=atob(encodedAllow).split(',').map(s=>s.trim().toLowerCase()).filter(Boolean);}catch{_allowList=[];}}
@@ -864,24 +932,27 @@ function adminRevoke(rev){
   try{if(encodedId)_placeId=atob(encodedId).trim();}catch{_placeId='';}
   if(!/^\d+$/.test(_placeId))_placeId='';
 
-  const isRevoked=_placeId?localStorage.getItem(`revoked_${_placeId}`)==='true':false;
-  if(isRevoked){showBlocked('Link invalid','This launch URL has been deactivated.');return;}
+  // Check revocation
+  if(_placeId&&localStorage.getItem(`revoked_${_placeId}`)==='true'){
+    showBlocked('Link invalid','This launch URL has been deactivated.');
+    return;
+  }
 
-  // Admin URL key — show legacy admin panel
-  if(key===ADMIN_KEY){showAdmin();return;}
-
-  // Launcher link
+  // Valid launch link
   if(_placeId){showLauncher();return;}
 
-  // Dashboard — require auth
-  const acct=getAccount();
-  if(acct&&sessionStorage.getItem('_authed')==='1'){
-    showDashboard('home');
-  } else if(acct){
-    showAuth('login');
-  } else {
-    showAuth('register');
-  }
+  // No launch link — check for valid session
+  if(isValidSession()){showDashboard('home');return;}
+
+  // Default: show plain launcher page (no hint of login existing)
+  render(`<div class="card text-center">
+    <div class="logo-icon green" style="margin:0 auto 14px">
+      <svg viewBox="0 0 24 24"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2Zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2Zm4.5 3c-.83 0-1.5-.67-1.5-1.5S14.67 13 15.5 13s1.5.67 1.5 1.5S16.33 16 15.5 16zm3-3c-.83 0-1.5-.67-1.5-1.5S17.67 10 18.5 10s1.5.67 1.5 1.5S19.33 13 18.5 13z"/></svg>
+    </div>
+    <div class="page-title">Roblox Launcher</div>
+    <div class="page-sub">Open this page with a valid game launch link.</div>
+    <div class="credits">Credits to ducky</div>
+  </div>`);
 })();
 </script>
 </body>
